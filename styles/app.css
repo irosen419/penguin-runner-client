@@ -1,0 +1,36 @@
+div#game-div {
+    height: 35vh;
+    width: 50vw;
+    margin: auto;
+    margin-top: 35vh;
+    border-style: solid;
+
+    position: relative;
+}
+
+#tree-man, .rock {
+    position: absolute;
+    bottom: 0;
+
+    border-style: solid;
+
+    width: 20px;
+}
+
+#tree-man {
+    left: 200px;
+    
+    height: 40px;
+
+    transition-timing-function: ease-in-out;
+    transition-duration: .25s;
+}
+
+
+.rock {
+
+    height: 20px;
+
+    transition-timing-function: linear;
+    transition-duration: .25s;
+}
