@@ -1,14 +1,17 @@
-canvas#game-canvas {
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 35vh;
-    display: block;
-
-    border-style: solid;
-
-    position: relative;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+
+
+
+
+ canvas#game {
+    display: block;
+}
+/*
 #tree-man, .rock {
     position: absolute;
     bottom: 0px;
@@ -33,4 +36,4 @@ canvas#game-canvas {
 
     transition-timing-function: linear;
     transition-duration: .25s;
-}
+} */

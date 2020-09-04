@@ -6,17 +6,51 @@ const rocks = []
 const GAME_CANVAS = qs('#game-canvas')
 const CANVAS_HEIGHT = GAME_CANVAS.height
 const CANVAS_WIDTH = GAME_CANVAS.width
-
+const CTX = GAME_CANVAS.getContext("2d");
+const FPS = 60
+let COUNTER = 0
 const treeMan = new Player("Ryan", 200, 270)
-treeMan.draw()
-// treeMan.update()
-document.addEventListener('keydown', e => {
-    if (e.which === 32) {
-        treeMan.update()
-    }
-});
 
 
+function gameLoop() {
+
+    CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+    treeMan.draw()
+
+
+    document.addEventListener('keydown', e => {
+        if (e.which === 32) {
+            COUNTER = 1
+            const treeJump = setInterval(function () {
+                treeMan.update()
+                treeMan.draw()
+                if (COUNTER === 0) {
+                    clearInterval(treeJump)
+                }
+            }, 1000 / FPS)
+        }
+
+        if (e.which === 13) {
+            setInterval(function () {
+                let rock = new Rock(950, 270)
+                rocks.push(rock)
+            }, 1500)
+            rocks.forEach(rock => {
+                setInterval(function () {
+                    console.log(rock)
+                    rock.x -= 10
+                    rock.draw()
+                }, 1000)
+            })
+        }
+    });
+    window.setInterval(gameLoop, 1000 / FPS);
+}
+
+gameLoop();
+
+//So we need to redraw our canvas every frame, and draw everyhting in the position it should be every frame
 
 // document.addEventListener('keydown', e => {
 //     if (e.which === 32) {
