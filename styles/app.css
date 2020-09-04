@@ -8,15 +8,28 @@ div#game-div {
     position: relative;
 }
 
+#tree-man, .rock {
+    position: absolute;
+    bottom: 0;
+
+    border-style: solid;
+
+    width: 20px;
+}
+
+#tree-man {
+    left: 200px;
+    
+    height: 40px;
+
+    transition-timing-function: ease-in-out;
+    transition-duration: .25s;
+}
+
+
 .rock {
 
     height: 20px;
-    width: 20px;
-    border-style: solid;
-
-    position: absolute;
-    bottom: 0;
-    right: 0px;
 
     transition-timing-function: linear;
     transition-duration: .25s;
