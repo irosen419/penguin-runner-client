@@ -1,8 +1,9 @@
-div#game-div {
-    height: 35vh;
-    width: 50vw;
-    margin: auto;
+canvas#game-canvas {
+    margin-right: auto;
+    margin-left: auto;
     margin-top: 35vh;
+    display: block;
+
     border-style: solid;
 
     position: relative;
