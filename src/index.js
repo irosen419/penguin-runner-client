@@ -1,11 +1,14 @@
 const qs = (selector) => document.querySelector(selector)
 const ce = (element) => document.createElement(element)
 
+
 const rocks = []
 const gameDiv = qs('#game-div')
 
 const treeMan = ce('div')
 treeMan.id = "tree-man"
+treeMan.style.right = "75%";
+treeMan.style.bottom = "0px";
 gameDiv.append(treeMan)
 
 
@@ -22,13 +25,13 @@ document.addEventListener('keydown', e => {
             rocks.push(rock)
 
             moveRock(rock)
-            console.log(rocks)
 
             if (rocks.length === 20) {
                 clearInterval(createRock)
             }
             createRock
         }, 1500)
+
     }
     if (e.key === 'ArrowUp') {
         treeMan.style.bottom = "40px";
@@ -41,6 +44,32 @@ document.addEventListener('keyup', e => {
     }
 })
 
+const checkCollision = (treeMan, rock) => {
+    const bottom = positionToInteger(treeMan.style.bottom)
+    const treeRight = parseInt(treeMan.style.right)
+    const treeLeft = parseInt(treeMan.style.right) + 20
+    const rockRight = calculatePositionRight(rock)
+    const rockLeft = calculatePositionLeft(rock)
+
+    if (bottom === 0) {
+        if (treeLeft > rockLeft && treeRight < rockRight) {
+            console.log('game over')
+            gameDiv.innerHTML = `<h1>GAME OVER</h1>`
+        }
+    }
+
+}
+
+const calculatePositionRight = (rock) => {
+    let position = (positionToInteger(rock.style.right) / gameDiv.offsetWidth) * 100
+    return position
+}
+
+const calculatePositionLeft = (rock) => {
+    let position = ((positionToInteger(rock.style.right) + 20) / gameDiv.offsetWidth) * 100
+    return position
+}
+
 const moveRock = (rock) => {
     const movement = setInterval(function () {
         let position = positionToInteger(rock.style.right)
@@ -50,6 +79,7 @@ const moveRock = (rock) => {
             clearInterval(movement)
             rock.remove()
         }
+        checkCollision(treeMan, rock)
     }, 250)
 
 }

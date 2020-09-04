@@ -10,7 +10,7 @@ div#game-div {
 
 #tree-man, .rock {
     position: absolute;
-    bottom: 0;
+    bottom: 0px;
 
     border-style: solid;
 
@@ -18,7 +18,6 @@ div#game-div {
 }
 
 #tree-man {
-    left: 200px;
     
     height: 40px;
 
