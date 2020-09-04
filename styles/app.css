@@ -1,0 +1,23 @@
+div#game-div {
+    height: 35vh;
+    width: 50vw;
+    margin: auto;
+    margin-top: 35vh;
+    border-style: solid;
+
+    position: relative;
+}
+
+.rock {
+
+    height: 20px;
+    width: 20px;
+    border-style: solid;
+
+    position: absolute;
+    bottom: 0;
+    right: 0px;
+
+    transition-timing-function: linear;
+    transition-duration: .25s;
+}
