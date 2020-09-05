@@ -4,37 +4,11 @@
     box-sizing: border-box;
 }
 
-
-
-
-
  canvas#game {
     display: block;
     background-image: url("https://opengameart.org/sites/default/files/rock_4.png"); 
 }
-/*
-#tree-man, .rock {
-    position: absolute;
-    bottom: 0px;
 
-    border-style: solid;
-
-    width: 20px;
-}
-
-#tree-man {
-    
-    height: 40px;
-
-    transition-timing-function: ease-in-out;
-    transition-duration: .25s;
-}
-
-
-.rock {
-
-    height: 20px;
-
-    transition-timing-function: linear;
-    transition-duration: .25s;
+/* iframe {
+    display: none;
 } */

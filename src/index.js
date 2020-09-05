@@ -1,131 +1,122 @@
-const qs = (selector) => document.querySelector(selector)
-const ce = (element) => document.createElement(element)
+const canvas = document.getElementById("game")
+const ctx = canvas.getContext("2d")
 
+let score;
+let scoreText;
+let highscore;
+let highscoreText;
+let player;
+let gravity;
+let rocks = [];
+let gameSpeed
+let KEYS = {};
 
-const rocks = []
-const GAME_CANVAS = qs('#game-canvas')
-const CANVAS_HEIGHT = GAME_CANVAS.height
-const CANVAS_WIDTH = GAME_CANVAS.width
-const CTX = GAME_CANVAS.getContext("2d");
-const FPS = 60
-let COUNTER = 0
-const treeMan = new Player("Ryan", 200, 270)
+//Event Listeners
 
+document.addEventListener('keydown', e => {
+    KEYS[e.code] = true
+})
+document.addEventListener('keyup', e => {
+    KEYS[e.code] = false
+})
 
-function gameLoop() {
+//Game Functions
 
-    CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+function spawnRock() {
+    let size = RandomIntInRange(20, 70);
+    let type = RandomIntInRange(0, 1)
+    console.log(canvas.width, size)
+    let rock = new Rock(canvas.width + size, canvas.height - size, size, size, '#2484E4')
 
-    treeMan.draw()
-
-
-    document.addEventListener('keydown', e => {
-        if (e.which === 32) {
-            COUNTER = 1
-            const treeJump = setInterval(function () {
-                treeMan.update()
-                treeMan.draw()
-                if (COUNTER === 0) {
-                    clearInterval(treeJump)
-                }
-            }, 1000 / FPS)
-        }
-
-        if (e.which === 13) {
-            setInterval(function () {
-                let rock = new Rock(950, 270)
-                rocks.push(rock)
-            }, 1500)
-            rocks.forEach(rock => {
-                setInterval(function () {
-                    console.log(rock)
-                    rock.x -= 10
-                    rock.draw()
-                }, 1000)
-            })
-        }
-    });
-    window.setInterval(gameLoop, 1000 / FPS);
+    if (type == 1) {
+        rock.y -= player.originalHeight - 10
+    }
+    rocks.push(rock)
 }
 
-gameLoop();
+function RandomIntInRange(min, max) {
+    return Math.round(Math.random() * (max - min) + min)
+}
 
-//So we need to redraw our canvas every frame, and draw everyhting in the position it should be every frame
 
-// document.addEventListener('keydown', e => {
-//     if (e.which === 32) {
-//         const createRock = setInterval(function () {
-//             let rock = ce('div')
-//             rock.className = "rock"
 
-//             rock.style.right = 0 + "px";
+function start() {
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
 
-//             gameDiv.append(rock)
-//             rocks.push(rock)
+    ctx.font = "20px sans-serif";
 
-//             moveRock(rock)
+    gameSpeed = 3;
+    gravity = 1;
 
-//             if (rocks.length === 20) {
-//                 clearInterval(createRock)
-//             }
-//             createRock
-//         }, 1500)
+    score = 0;
+    highscore = 0;
 
-//     }
-//     if (e.key === 'ArrowUp') {
-//         treeMan.style.bottom = "40px";
-//     }
-// })
+    // if (localStorage.getItem('highscore')) {
+    //     highscore = localStorage.getItem('highscore');
+    // }
 
-// document.addEventListener('keyup', e => {
-//     if (e.key === 'ArrowUp') {
-//         treeMan.style.bottom = "0px";
-//     }
-// })
+    player = new Player(25, 0, 50, 50, '#FF5858')
 
-// const checkCollision = (treeMan, rock) => {
-//     const treeBottom = positionToInteger(treeMan.style.bottom)
-//     const treeRight = parseInt(treeMan.style.right)
-//     const treeLeft = parseInt(treeMan.style.right) + 20
-//     const rockRight = calculatePositionRight(rock)
-//     const rockLeft = calculatePositionLeft(rock)
+    scoreText = new Text("Score: " + score, 25, 25, "left", "#212121", "20")
+    highscoreText = new Text("Highscore: " + highscore, canvas.width - 25, 25, "right", "#212121", "20")
+    requestAnimationFrame(update)
+}
 
-//     if (treeBottom === 0 && (treeLeft > rockLeft && treeRight < rockRight)) {
-//         // if (treeLeft > rockLeft && treeRight < rockRight) {
-//         console.log('game over')
-//         gameDiv.innerHTML = `<h1>GAME OVER</h1>`
-//         // }
-//     }
-// }
+let initialSpawnTimer = 200
+let spawnTimer = initialSpawnTimer
+function update() {
+    requestAnimationFrame(update);
 
-// const calculatePositionRight = (rock) => {
-//     let position = (positionToInteger(rock.style.right) / gameDiv.offsetWidth) * 100
-//     return position
-// }
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-// const calculatePositionLeft = (rock) => {
-//     let position = ((positionToInteger(rock.style.right) + 20) / gameDiv.offsetWidth) * 100
-//     return position
-// }
+    spawnTimer--;
 
-// const moveRock = (rock) => {
-//     const movement = setInterval(function () {
-//         let position = positionToInteger(rock.style.right)
-//         position += 20
-//         rock.style.right = position + "px"
-//         if (rock.style.right == "1000px") {
-//             clearInterval(movement)
-//             rock.remove()
-//         }
-//         checkCollision(treeMan, rock)
-//     }, 250)
+    if (spawnTimer <= 0) {
+        spawnRock()
 
-// }
+        spawnTimer = initialSpawnTimer - (gameSpeed * 8)
 
-// const randomTime = () => {
-//     return (Math.floor(Math.random() * 11) * 100)
-// }
+        if (spawnTimer < 60) {
+            spawnTimer = 60
+        }
+    }
 
-// const positionToInteger = (p) => {
-//     return parseInt(p.split('px')[0]) || 0
-// }
+    // Spawn Rocks
+    for (let i = 0; i < rocks.length; i++) {
+        let r = rocks[i]
+
+
+        if (r.x + r.w < 0) {
+            rocks.splice(i, 1)
+        }
+
+        if (player.x < r.x + r.w && player.x + player.w > r.x && player.y < r.y + r.h && player.y + player.h > r.y) {
+            rocks = [];
+            score = 0;
+            spawnTimer = initialSpawnTimer;
+            gameSpeed = 3;
+            // window.localStorage.setItem('highscore', highscore)
+        }
+
+
+        r.update()
+    }
+
+    player.animate()
+
+    score++;
+    scoreText.t = "Score:" + score;
+    scoreText.draw();
+
+    if (score > highscore) {
+        highscore = score;
+        highscoreText.t = "Highscore: " + highscore;
+    }
+
+    highscoreText.draw()
+
+    gameSpeed += 0.003
+}
+
+start()
