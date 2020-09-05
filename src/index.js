@@ -11,6 +11,12 @@ let rocks = [];
 let gameSpeed
 let KEYS = {};
 
+let userFetch = new FetchAdapter('http://localhost:3000/users/1')
+
+userFetch.get().then(user => {
+    highscore = user.highscore
+    start(highscore)
+})
 //Event Listeners
 
 document.addEventListener('keydown', e => {
@@ -25,7 +31,7 @@ document.addEventListener('keyup', e => {
 function spawnRock() {
     let size = RandomIntInRange(20, 70);
     let type = RandomIntInRange(0, 1)
-    console.log(canvas.width, size)
+
     let rock = new Rock(canvas.width + size, canvas.height - size, size, size, '#2484E4')
 
     if (type == 1) {
@@ -38,9 +44,7 @@ function RandomIntInRange(min, max) {
     return Math.round(Math.random() * (max - min) + min)
 }
 
-
-
-function start() {
+function start(highscore) {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
@@ -49,12 +53,8 @@ function start() {
     gameSpeed = 3;
     gravity = 1;
 
-    score = 0;
-    highscore = 0;
 
-    // if (localStorage.getItem('highscore')) {
-    //     highscore = localStorage.getItem('highscore');
-    // }
+    score = 0;
 
     player = new Player(25, 0, 50, 50, '#FF5858')
 
@@ -96,7 +96,7 @@ function update() {
             score = 0;
             spawnTimer = initialSpawnTimer;
             gameSpeed = 3;
-            // window.localStorage.setItem('highscore', highscore)
+            userFetch.patch(highscore)
         }
 
 
@@ -119,4 +119,3 @@ function update() {
     gameSpeed += 0.003
 }
 
-start()

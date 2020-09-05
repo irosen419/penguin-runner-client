@@ -11,7 +11,6 @@ class Rock {
 
     update() {
         this.x += this.dx
-        console.log(this.x, this.y)
         this.draw()
         this.dx = -gameSpeed
     }
