@@ -1,36 +1,14 @@
-div#game-div {
-    height: 35vh;
-    width: 50vw;
-    margin: auto;
-    margin-top: 35vh;
-    border-style: solid;
-
-    position: relative;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-#tree-man, .rock {
-    position: absolute;
-    bottom: 0;
-
-    border-style: solid;
-
-    width: 20px;
+ canvas#game {
+    display: block;
+    background-image: url("https://opengameart.org/sites/default/files/rock_4.png"); 
 }
 
-#tree-man {
-    left: 200px;
-    
-    height: 40px;
-
-    transition-timing-function: ease-in-out;
-    transition-duration: .25s;
-}
-
-
-.rock {
-
-    height: 20px;
-
-    transition-timing-function: linear;
-    transition-duration: .25s;
-}
+/* iframe {
+    display: none;
+} */
