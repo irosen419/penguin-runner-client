@@ -6,7 +6,8 @@
 
  canvas#game {
     display: block;
-    background-image: url("https://opengameart.org/sites/default/files/rock_4.png"); 
+    /* background-image: url("https://opengameart.org/sites/default/files/rock_4.png");  */
+    background-image: url("https://i.ibb.co/Vx1BWrC/Chilly-Road-Background-V1-1.png")
 }
 
 /* iframe {
