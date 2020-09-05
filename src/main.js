@@ -30,7 +30,7 @@ function spawnRock() {
 }
 
 function RandomIntInRange(min, max) {
-    return Math.round(Math.random() * (min - max) - min)
+    return Math.round(Math.random() * (min - max) + min)
 }
 
 //Game Functions
@@ -54,7 +54,6 @@ function start() {
 let initialSpawnTimer = 200
 let spawnTimer = initialSpawnTimer
 function update() {
-    requestAnimationFrame(update);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -62,6 +61,7 @@ function update() {
 
     if (spawnTimer <= 0) {
         spawnRock()
+        console.log(rocks)
         spawnTimer = initialSpawnTimer - gameSpeed * 8
 
         if (spawnTimer < 60) {
@@ -78,6 +78,7 @@ function update() {
 
     player.animate()
 
+    requestAnimationFrame(update);
 }
 
 start()
