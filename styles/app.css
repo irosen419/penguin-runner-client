@@ -10,6 +10,7 @@
 
  canvas#game {
     display: block;
+    background-image: url("https://opengameart.org/sites/default/files/rock_4.png"); 
 }
 /*
 #tree-man, .rock {
