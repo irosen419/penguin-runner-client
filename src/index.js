@@ -11,16 +11,80 @@ let rocks = [];
 let gameSpeed
 let KEYS = {};
 
-let userFetch = new FetchAdapter('http://localhost:3000/users/1')
+let userId;
 
-userFetch.get().then(user => {
-    highscore = user.highscore
-    start(highscore)
+// Achievements
+
+let rockCounter;
+
+let achievementDiv = document.querySelector('#achievement')
+let form = document.querySelector('form')
+
+document.addEventListener('submit', e => {
+    if (e.target.matches('form')) {
+        e.preventDefault()
+        fetchFormInfo(form)
+        form.setAttribute("hidden", "hidden")
+    }
 })
+
+let userFetch = new FetchAdapter('http://localhost:3000/users/')
+
+const fetchFormInfo = (form) => {
+    const username = form.username.value
+    fetchName(username)
+}
+
+const fetchName = (username) => {
+    userFetch.get().then(users => grabUsername(users, username))
+}
+
+const signIn = (userId) => {
+    userFetch.getUser(userId).then(user => {
+        highscore = user.highscore;
+        rockCounter = user.rocks_dodged;
+        start(highscore);
+    })
+}
+
+const signUp = (username) => {
+    userFetch.postUser(username).then(user => {
+        highscore = user.highscore;
+        rockCounter = user.rocks_dodged;
+        start(highscore)
+    })
+}
+
+const grabUsername = (users, username) => {
+    if (users.length > 0) {
+
+        let user = users.find(function (u) {
+            return u.username === username
+        });
+
+        if (user) {
+            userId = user.id
+            console.log(`Your current user is ${user.id}`)
+            console.log("You are signing in")
+            debugger
+            signIn(userId)
+        } else {
+            console.log(`You are signing up. Thanks!`)
+            signUp(username)
+        }
+
+    } else {
+        console.log("You are creating your very first user")
+        signUp(username)
+    }
+}
+
+
 //Event Listeners
 
 document.addEventListener('keydown', e => {
     KEYS[e.code] = true
+
 })
 document.addEventListener('keyup', e => {
     KEYS[e.code] = false
@@ -56,17 +120,47 @@ function start(highscore) {
 
     score = 0;
 
-    player = new Player(25, 0, 50, 50, '#FF5858')
+    player = new Player(250, 0, 50, 50, '#FF5858')
 
     scoreText = new Text("Score: " + score, 25, 25, "left", "#212121", "20")
     highscoreText = new Text("Highscore: " + highscore, canvas.width - 25, 25, "right", "#212121", "20")
     requestAnimationFrame(update)
 }
 
+const checkAchievement = (rockCounter, userId) => {
+    if (rockCounter >= 20 && rockCounter < 50) {
+        let achievement = new UserAchievement("20 Rocks Dodged")
+        achievement.twentyBomb(userId).then(obj => {
+            if (obj.id) {
+                displayAchievement(achievement.name)
+            }
+        })
+    } else if (rockCounter >= 50 && rockCounter < 100) {
+        let achievement = new UserAchievement("50 Rocks Dodged")
+        achievement.fiftyBomb(userId).then(obj => {
+            if (obj.id) {
+                displayAchievement(achievement.name)
+            }
+        })
+    } else if (rockCounter >= 100) {
+        let achievement = new UserAchievement("100 Rocks Dodged")
+        achievement.hundoBomb(userId).then(obj => {
+            if (obj.id) {
+                displayAchievement(achievement.name)
+            }
+        })
+    }
+}
+
+const displayAchievement = (achievementName) => {
+    achievementDiv.innerHTML = `<h2><strong>CONGRATULATIONS! ${achievementName.toUpperCase()}!</strong></h2>`
+    setTimeout(function () { achievementDiv.innerHTML = "" }, 3000)
+}
+
 let initialSpawnTimer = 200
 let spawnTimer = initialSpawnTimer
 function update() {
-    requestAnimationFrame(update);
+    const animation = requestAnimationFrame(update);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -89,6 +183,8 @@ function update() {
 
         if (r.x + r.w < 0) {
             rocks.splice(i, 1)
+            rockCounter++
+            console.log(rockCounter)
         }
 
         if (player.x < r.x + r.w && player.x + player.w > r.x && player.y < r.y + r.h && player.y + player.h > r.y) {
@@ -96,9 +192,10 @@ function update() {
             score = 0;
             spawnTimer = initialSpawnTimer;
             gameSpeed = 3;
-            userFetch.patch(highscore)
-        }
+            userFetch.patch(highscore, rockCounter, userId)
 
+            checkAchievement(rockCounter, userId)
+        }
 
         r.update()
     }
@@ -117,5 +214,14 @@ function update() {
     highscoreText.draw()
 
     gameSpeed += 0.003
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'p') {
+            cancelAnimationFrame(animation)
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            form.removeAttribute("hidden")
+        }
+    })
+
 }
 

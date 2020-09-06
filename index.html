@@ -11,19 +11,27 @@
     <script defer src="src/text.js"></script>
     <script defer src="src/rock.js"></script>
     <script defer src="src/player.js"></script>
+    <script defer src="src/userAchievement.js"></script>
     <script defer src="src/index.js"></script>
 
 </head>
 
 <body>
 
-    <iframe style="width: 0; height: 0; border: 0; border: none; position: absolute;"
-    src="https://www.youtube.com/embed/3T5x512SQBA?rel=0&modestbranding=1&autohide=1&mute=0&showinfo=0&controls=1&autoplay=1&loop=1" wmode="transparent" frameborder="0"
-    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen autoplay
-    loop></iframe>  
+    <!-- <iframe allowfullscreen loop autoplay style="width: 0; height: 0; border: 0; border: none; position: absolute;"
+        src="https://www.youtube.com/embed/3T5x512SQBA?rel=0&modestbranding=1&autohide=1&mute=0&showinfo=0&controls=1&autoplay=1&loop=1"
+        wmode="transparent" frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe> -->
+    <form id="signin-form">
+        <label for="fname">Username: </label>
+        <input type="text" id="username" name="username">
+        <input type="submit" value="Login or Sign Up">
+    </form>
 
-    <canvas id='game' height="400" width="640"></canvas>
+    <div id="achievement"></div>
+
+    <canvas id='game' height="400" width="640">
+    </canvas>
 </body>
 
 </html>
-
