@@ -19,17 +19,12 @@ class FetchAdapter {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                Accept: "application/json"
+                "Accept": "application/json"
             },
             body: JSON.stringify({ "username": username })
         }
 
-
-        return fetch(this.baseUrl, options)
-            .then(resp => {
-                console.log(resp)
-                resp.json()
-            })
+        return fetch(this.baseUrl, options).then(resp => resp.json())
     }
 
     patch(highscore, id) {

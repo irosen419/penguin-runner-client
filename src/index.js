@@ -12,14 +12,14 @@ let gameSpeed
 let KEYS = {};
 
 let userId;
-// let highscore;
+
+let form = document.querySelector('form')
 
 document.addEventListener('submit', e => {
     if (e.target.matches('form')) {
         e.preventDefault()
-        let form = e.target;
         fetchFormInfo(form)
-        form.innerHTML = ""
+        form.setAttribute("hidden", "hidden")
     }
 })
 
@@ -59,6 +59,7 @@ const grabUsername = (users, username) => {
             userId = user.id
             console.log(`Your current user is ${user.id}`)
             console.log("You are signing in")
+            debugger
             signIn(userId)
         } else {
             console.log(`You are signing up. Thanks!`)
@@ -76,6 +77,7 @@ const grabUsername = (users, username) => {
 
 document.addEventListener('keydown', e => {
     KEYS[e.code] = true
+
 })
 document.addEventListener('keyup', e => {
     KEYS[e.code] = false
@@ -111,7 +113,7 @@ function start(highscore) {
 
     score = 0;
 
-    player = new Player(25, 0, 50, 50, '#FF5858')
+    player = new Player(250, 0, 50, 50, '#FF5858')
 
     scoreText = new Text("Score: " + score, 25, 25, "left", "#212121", "20")
     highscoreText = new Text("Highscore: " + highscore, canvas.width - 25, 25, "right", "#212121", "20")
@@ -121,7 +123,7 @@ function start(highscore) {
 let initialSpawnTimer = 200
 let spawnTimer = initialSpawnTimer
 function update() {
-    requestAnimationFrame(update);
+    const animation = requestAnimationFrame(update);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -172,5 +174,15 @@ function update() {
     highscoreText.draw()
 
     gameSpeed += 0.003
+
+    document.addEventListener('keydown', e => {
+        // console.log(e.key)
+        if (e.key === 'p') {
+            cancelAnimationFrame(animation)
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            form.removeAttribute("hidden")
+        }
+    })
+
 }
 
