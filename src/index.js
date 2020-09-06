@@ -13,6 +13,10 @@ let KEYS = {};
 
 let userId;
 
+// Achievements
+
+let rockCounter;
+
 let form = document.querySelector('form')
 
 document.addEventListener('submit', e => {
@@ -36,14 +40,16 @@ const fetchName = (username) => {
 
 const signIn = (userId) => {
     userFetch.getUser(userId).then(user => {
-        highscore = user.highscore
-        start(highscore)
+        highscore = user.highscore;
+        rockCounter = user.rocks_dodged;
+        start(highscore);
     })
 }
 
 const signUp = (username) => {
     userFetch.postUser(username).then(user => {
-        highscore = user.highscore
+        highscore = user.highscore;
+        rockCounter = user.rocks_dodged;
         start(highscore)
     })
 }
@@ -146,6 +152,8 @@ function update() {
 
         if (r.x + r.w < 0) {
             rocks.splice(i, 1)
+            rockCounter++
+            console.log(rockCounter)
         }
 
         if (player.x < r.x + r.w && player.x + player.w > r.x && player.y < r.y + r.h && player.y + player.h > r.y) {
@@ -153,7 +161,7 @@ function update() {
             score = 0;
             spawnTimer = initialSpawnTimer;
             gameSpeed = 3;
-            userFetch.patch(highscore, userId)
+            userFetch.patch(highscore, rockCounter, userId)
         }
 
 
@@ -176,7 +184,6 @@ function update() {
     gameSpeed += 0.003
 
     document.addEventListener('keydown', e => {
-        // console.log(e.key)
         if (e.key === 'p') {
             cancelAnimationFrame(animation)
             ctx.clearRect(0, 0, canvas.width, canvas.height)
