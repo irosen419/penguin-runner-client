@@ -11,12 +11,67 @@ let rocks = [];
 let gameSpeed
 let KEYS = {};
 
-let userFetch = new FetchAdapter('http://localhost:3000/users/1')
+let userId;
+// let highscore;
 
-userFetch.get().then(user => {
-    highscore = user.highscore
-    start(highscore)
+document.addEventListener('submit', e => {
+    if (e.target.matches('form')) {
+        e.preventDefault()
+        let form = e.target;
+        fetchFormInfo(form)
+        form.innerHTML = ""
+    }
 })
+
+let userFetch = new FetchAdapter('http://localhost:3000/users/')
+
+const fetchFormInfo = (form) => {
+    const username = form.username.value
+    fetchName(username)
+}
+
+const fetchName = (username) => {
+    userFetch.get().then(users => grabUsername(users, username))
+}
+
+const signIn = (userId) => {
+    userFetch.getUser(userId).then(user => {
+        highscore = user.highscore
+        start(highscore)
+    })
+}
+
+const signUp = (username) => {
+    userFetch.postUser(username).then(user => {
+        highscore = user.highscore
+        start(highscore)
+    })
+}
+
+const grabUsername = (users, username) => {
+    if (users.length > 0) {
+
+        let user = users.find(function (u) {
+            return u.username === username
+        });
+
+        if (user) {
+            userId = user.id
+            console.log(`Your current user is ${user.id}`)
+            console.log("You are signing in")
+            signIn(userId)
+        } else {
+            console.log(`You are signing up. Thanks!`)
+            signUp(username)
+        }
+
+    } else {
+        console.log("You are creating your very first user")
+        signUp(username)
+    }
+}
+
+
 //Event Listeners
 
 document.addEventListener('keydown', e => {
@@ -96,7 +151,7 @@ function update() {
             score = 0;
             spawnTimer = initialSpawnTimer;
             gameSpeed = 3;
-            userFetch.patch(highscore)
+            userFetch.patch(highscore, userId)
         }
 
 
