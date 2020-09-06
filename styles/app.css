@@ -21,3 +21,19 @@ form {
     position: absolute;
     top: 25;
 }
+
+div#achievement {
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+
+    text-align: center;
+}
+
+div#achievement h2{
+    color: rgba(1, 36, 177, 0.699);
+    font-size: 32px;
+}

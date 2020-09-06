@@ -17,6 +17,7 @@ let userId;
 
 let rockCounter;
 
+let achievementDiv = document.querySelector('#achievement')
 let form = document.querySelector('form')
 
 document.addEventListener('submit', e => {
@@ -126,6 +127,36 @@ function start(highscore) {
     requestAnimationFrame(update)
 }
 
+const checkAchievement = (rockCounter, userId) => {
+    if (rockCounter >= 20 && rockCounter < 50) {
+        let achievement = new UserAchievement("20 Rocks Dodged")
+        achievement.twentyBomb(userId).then(obj => {
+            if (obj.id) {
+                displayAchievement(achievement.name)
+            }
+        })
+    } else if (rockCounter >= 50 && rockCounter < 100) {
+        let achievement = new UserAchievement("50 Rocks Dodged")
+        achievement.fiftyBomb(userId).then(obj => {
+            if (obj.id) {
+                displayAchievement(achievement.name)
+            }
+        })
+    } else if (rockCounter >= 100) {
+        let achievement = new UserAchievement("100 Rocks Dodged")
+        achievement.hundoBomb(userId).then(obj => {
+            if (obj.id) {
+                displayAchievement(achievement.name)
+            }
+        })
+    }
+}
+
+const displayAchievement = (achievementName) => {
+    achievementDiv.innerHTML = `<h2><strong>CONGRATULATIONS! ${achievementName.toUpperCase()}!</strong></h2>`
+    setTimeout(function () { achievementDiv.innerHTML = "" }, 3000)
+}
+
 let initialSpawnTimer = 200
 let spawnTimer = initialSpawnTimer
 function update() {
@@ -162,8 +193,9 @@ function update() {
             spawnTimer = initialSpawnTimer;
             gameSpeed = 3;
             userFetch.patch(highscore, rockCounter, userId)
-        }
 
+            checkAchievement(rockCounter, userId)
+        }
 
         r.update()
     }
