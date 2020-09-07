@@ -6,13 +6,18 @@ class UserAchievement {
 
     }
 
+    check() {
+        return fetch(this.achievementUrl)
+            .then(resp => resp.json())
+    }
+
     twentyBomb(userId) {
         let achievement = {
             "user_id": userId,
             "achievement_id": 1
         }
 
-        this.options = {
+        const options = {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -21,16 +26,16 @@ class UserAchievement {
             body: JSON.stringify(achievement)
         }
 
-        return fetch(this.achievementUrl, this.options)
+        return fetch(this.achievementUrl, options)
             .then(resp => resp.json())
     }
-    fiftytyBomb(userId) {
+    fiftyBomb(userId) {
         let achievement = {
             "user_id": userId,
             "achievement_id": 2
         }
 
-        this.options = {
+        const options = {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -48,7 +53,7 @@ class UserAchievement {
             "achievement_id": 3
         }
 
-        this.options = {
+        const options = {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

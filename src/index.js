@@ -1,5 +1,9 @@
-const canvas = document.getElementById("game")
+const qs = (selector) => document.querySelector(selector)
+
+const canvas = qs("#game")
 const ctx = canvas.getContext("2d")
+let achievementDiv = qs('#achievement')
+let form = qs('form')
 
 let score;
 let scoreText;
@@ -11,14 +15,19 @@ let rocks = [];
 let gameSpeed
 let KEYS = {};
 
+
+// User Attributes
 let userId;
 
-// Achievements
-
+// Achievement Variables
 let rockCounter;
 
-let achievementDiv = document.querySelector('#achievement')
-let form = document.querySelector('form')
+// Achievement Truthiness
+let twentyRocks = false
+let fiftyRocks = false
+let hundoRocks = false
+
+
 
 document.addEventListener('submit', e => {
     if (e.target.matches('form')) {
@@ -43,15 +52,37 @@ const signIn = (userId) => {
     userFetch.getUser(userId).then(user => {
         highscore = user.highscore;
         rockCounter = user.rocks_dodged;
+        // debugger
         start(highscore);
     })
 }
 
 const signUp = (username) => {
     userFetch.postUser(username).then(user => {
+        userId = user.id
         highscore = user.highscore;
         rockCounter = user.rocks_dodged;
         start(highscore)
+    })
+}
+
+const findAchievements = (id) => {
+    let achievement = new UserAchievement("AchievementFinder")
+    achievement.check().then(data => {
+        for (const userAchievement of data) {
+            if (userAchievement.user_id == userId && userAchievement.achievement_id == 1) {
+                twentyRocks = true
+                console.log(fiftyRocks, hundoRocks)
+            }
+            if (userAchievement.user_id == userId && userAchievement.achievement_id == 2) {
+                fiftyRocks = true
+                console.log("You already have the 50 bomb achievement")
+            }
+            if (userAchievement.user_id == userId && userAchievement.achievement_id == 3) {
+                hundoRocks = true
+                console.log("You already have the 100 bomb achievement")
+            }
+        }
     })
 }
 
@@ -66,10 +97,10 @@ const grabUsername = (users, username) => {
             userId = user.id
             console.log(`Your current user is ${user.id}`)
             console.log("You are signing in")
-            debugger
+            findAchievements(user.id)
             signIn(userId)
         } else {
-            console.log(`You are signing up. Thanks!`)
+            console.log('You are signing up. Thanks!')
             signUp(username)
         }
 
@@ -127,33 +158,40 @@ function start(highscore) {
     requestAnimationFrame(update)
 }
 
-const checkAchievement = (rockCounter, userId) => {
-    if (rockCounter >= 20 && rockCounter < 50) {
+// Chech For and Display Achievements
+
+const giveAchievement = (rockCounter, userId) => {
+    if (rockCounter >= 1 && !twentyRocks) {
         let achievement = new UserAchievement("20 Rocks Dodged")
         achievement.twentyBomb(userId).then(obj => {
-            if (obj.id) {
-                displayAchievement(achievement.name)
-            }
-        })
-    } else if (rockCounter >= 50 && rockCounter < 100) {
-        let achievement = new UserAchievement("50 Rocks Dodged")
-        achievement.fiftyBomb(userId).then(obj => {
-            if (obj.id) {
-                displayAchievement(achievement.name)
-            }
-        })
-    } else if (rockCounter >= 100) {
-        let achievement = new UserAchievement("100 Rocks Dodged")
-        achievement.hundoBomb(userId).then(obj => {
-            if (obj.id) {
-                displayAchievement(achievement.name)
-            }
+            console.log("You have been given the 20 achievement")
+            twentyRocks = true
+            displayAchievement()
         })
     }
+
+    if (rockCounter >= 5 && !fiftyRocks) {
+        let achievement = new UserAchievement("50 Rocks Dodged")
+        achievement.fiftyBomb(userId).then(obj => {
+            console.log("You have been given the 50 achievement")
+            fiftyRocks = true
+            displayAchievement()
+        })
+    }
+
+    if (rockCounter >= 10 && !hundoRocks) {
+        let achievement = new UserAchievement("100 Rocks Dodged")
+        achievement.hundoBomb(userId).then(obj => {
+            console.log("You have been given the 100 achievement")
+            hundoRocks = true
+            displayAchievement()
+        })
+    }
+
 }
 
-const displayAchievement = (achievementName) => {
-    achievementDiv.innerHTML = `<h2><strong>CONGRATULATIONS! ${achievementName.toUpperCase()}!</strong></h2>`
+const displayAchievement = () => {
+    achievementDiv.innerHTML = `<img src="styles/images/trophy.png">`
     setTimeout(function () { achievementDiv.innerHTML = "" }, 3000)
 }
 
@@ -194,7 +232,7 @@ function update() {
             gameSpeed = 3;
             userFetch.patch(highscore, rockCounter, userId)
 
-            checkAchievement(rockCounter, userId)
+            giveAchievement(rockCounter, userId)
         }
 
         r.update()

@@ -33,7 +33,6 @@ div#achievement {
     text-align: center;
 }
 
-div#achievement h2{
-    color: rgba(1, 36, 177, 0.699);
-    font-size: 32px;
+div#achievement img {
+    height: 350px;
 }
