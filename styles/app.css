@@ -74,15 +74,18 @@ div#achievement img {
   }
 
   #modal-content button {
-      margin: 0 auto 10px auto;
-      width: 200px;
+    margin: 0 auto 10px auto;
+    width: 200px;
+    max-width: 100%;
+    font-size: 16px;
 
-      font-size: 16px;
+    word-wrap: break-word;
   }
 
   /* Open Button*/
 
   #myBtn {
+    display: none;
     position: absolute;
     top: 5%;
     right: 2%;
@@ -116,9 +119,6 @@ div#achievement img {
     cursor: pointer;
   }
 
-  #achievementCloseBtn {
-      /* position: absolute;
-      top: 40%;
-      right: 37.5%; */
-      /* z-index: 2; */
+  #achievements, #leaderboard {
+      
   }

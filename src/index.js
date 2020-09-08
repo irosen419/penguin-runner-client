@@ -1,4 +1,5 @@
 const qs = (selector) => document.querySelector(selector)
+const ce = (element) => document.createElement(element)
 
 const canvas = qs("#game")
 const ctx = canvas.getContext("2d")
@@ -14,6 +15,7 @@ let gravity;
 let rocks = [];
 let gameSpeed
 let KEYS = {};
+let users = [];
 
 // Music
 let music;
@@ -23,11 +25,16 @@ let userId;
 
 // Achievement Variables
 let rockCounter;
+let gameRocks = 0;
 
 // Achievement Truthiness
-let twentyRocks = false
 let fiftyRocks = false
 let hundoRocks = false
+let twofiddyRocks = false
+
+let twentyFiveGameRocks = false
+let fiddyGameRocks = false
+let hundoGameRocks = false
 
 // Modal Page Variables
 
@@ -76,17 +83,24 @@ const findAchievements = (id) => {
         for (const userAchievement of data) {
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 1) {
                 achievementList.push(userAchievement.achievement_id)
-                twentyRocks = true
+                fiftyRocks = true
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 2) {
                 achievementList.push(userAchievement.achievement_id)
-                fiftyRocks = true
-                console.log("You already have the 50 bomb achievement")
+                hundoRocks = true
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 3) {
                 achievementList.push(userAchievement.achievement_id)
-                hundoRocks = true
-                console.log("You already have the 100 bomb achievement")
+                twofiddyRocks = true
+            }
+            if (userAchievement.user_id == userId && userAchievement.achievement_id == 4) {
+                twentyFiveGameRocks = true
+            }
+            if (userAchievement.user_id == userId && userAchievement.achievement_id == 5) {
+                fiddyGameRocks = false
+            }
+            if (userAchievement.user_id == userId && userAchievement.achievement_id == 6) {
+                hundoGameRocks = false
             }
         }
     })
@@ -166,43 +180,69 @@ function start(highscore) {
 
     scoreText = new Text("Score: " + score, 25, 25, "left", "#212121", "20")
     highscoreText = new Text("High Score: " + highscore, canvas.width - 25, 25, "right", "#212121", "20")
-    requestAnimationFrame(update)
+    setInterval(requestAnimationFrame(update), 1000 / 30)
 
     document.addEventListener('keydown', e => {
         if (e.key === '-') {
             music.lowerVolume()
         } else if (e.key === '=') {
             music.raiseVolume()
+        } else if (e.key === 'm') {
+            music.muteVolume()
         }
     })
+
+    let btn = qs('#myBtn')
+    btn.style.display = "block"
+
 }
 
 // Chech For and Display Achievements
 
 const giveAchievement = (rockCounter, userId) => {
-    if (rockCounter >= 1 && !twentyRocks) {
-        let achievement = new UserAchievement("20 Rocks Dodged")
-        achievement.twentyBomb(userId).then(obj => {
-            console.log("You have been given the 20 achievement")
-            twentyRocks = true
-            displayAchievement()
-        })
-    }
-
-    if (rockCounter >= 5 && !fiftyRocks) {
-        let achievement = new UserAchievement("50 Rocks Dodged")
+    if (rockCounter >= 50 && !twentyRocks) {
+        let achievement = new UserAchievement("50 Lifetime Rocks Dodged")
         achievement.fiftyBomb(userId).then(obj => {
-            console.log("You have been given the 50 achievement")
+            console.log("You have been given the 20 achievement")
             fiftyRocks = true
             displayAchievement()
         })
     }
 
-    if (rockCounter >= 10 && !hundoRocks) {
-        let achievement = new UserAchievement("100 Rocks Dodged")
+    if (rockCounter >= 100 && !fiftyRocks) {
+        let achievement = new UserAchievement("100 Lifetime Rocks Dodged")
         achievement.hundoBomb(userId).then(obj => {
-            console.log("You have been given the 100 achievement")
             hundoRocks = true
+            displayAchievement()
+        })
+    }
+
+    if (rockCounter >= 250 && !hundoRocks) {
+        let achievement = new UserAchievement("250 Rocks Dodged")
+        achievement.twofiddyBomb(userId).then(obj => {
+            twofiddyRocks = true
+            displayAchievement()
+        })
+    }
+
+    if (gameRocks >= 25 && !twentyfiveGameRocks) {
+        let achievement = new UserAchievement("25 Rocks Dodged in One Game")
+        achievement.twentyFiveInGame(userId).then(obj => {
+            twentyfiveGameRocks = true
+            displayAchievement()
+        })
+    }
+    if (gameRocks >= 50 && !fiddyGameRocks) {
+        let achievement = new UserAchievement("50 Rocks Dodged in One Game")
+        achievement.fiddyInGame(userId).then(obj => {
+            fiddyGameRocks = true
+            displayAchievement()
+        })
+    }
+    if (gameRocks >= 100 && !hundoGameRocks) {
+        let achievement = new UserAchievement("100 Rocks Dodged in One Game")
+        achievement.hundoInGame(userId).then(obj => {
+            hundoGameRocks = true
             displayAchievement()
         })
     }
@@ -245,7 +285,8 @@ function update() {
         if (r.x + r.w < 0) {
             rocks.splice(i, 1)
             rockCounter++
-            console.log(rockCounter)
+            gameRocks++
+            console.log(gamRocks)
         }
 
         if (player.x < r.x + r.w && player.x + player.w > r.x && player.y < r.y + r.h && player.y + player.h > r.y) {
@@ -255,7 +296,7 @@ function update() {
             gameSpeed = 3;
             userFetch.patch(highscore, rockCounter, userId)
 
-            giveAchievement(rockCounter, userId)
+            giveAchievement(rockCounter, gameRocks, userId)
         }
 
         r.update()
@@ -274,7 +315,7 @@ function update() {
 
     highscoreText.draw()
 
-    gameSpeed += 0.003
+    gameSpeed += 0.005
 
     document.addEventListener('keydown', e => {
         if (e.key === 'p') {
@@ -285,71 +326,3 @@ function update() {
         }
     })
 }
-
-// Modal Logic
-
-let modal = document.getElementById("myModal");
-let btn = document.getElementById("myBtn");
-
-btn.onclick = function () {
-    modal.style.display = "block";
-}
-
-let innerModal = qs('#modal-content')
-const modalMenu = `
-    <span class="close" class="hover" id="mainMenu">&times;</span>
-    <button class="hover" id="achievements">ACHIEVEMENTS</button>
-    <button class="hover" id="leaderboard">LEADERBOARD</button>
-    <h3>Audio Controls:</h3>
-    <p>Volume down: - </p>
-    <p>Volume up: + </p>
-`
-innerModal.innerHTML = modalMenu
-
-document.addEventListener('click', e => {
-    if (e.target.matches('#achievements')) {
-        innerModal.innerHTML = ""
-        let achievements = new Achievement()
-        achievements.fetchAchievements().then(achs => {
-            innerModal.innerHTML = `<h3>YOUR ACHIEVEMENTS</h3>`
-            for (const ach of achs) {
-                if (achievementList.includes(ach.id)) {
-                    renderAchievement(ach)
-                }
-            }
-            const span = document.createElement('span')
-            span.id = "achievementCloseBtn"
-            span.className = "close hover"
-            span.innerHTML = `&times;`
-            innerModal.insertAdjacentElement('beforeend', span)
-        })
-    } else if (e.target.matches('#achievementCloseBtn')) {
-        innerModal.innerHTML = modalMenu
-    }
-})
-
-
-const renderAchievement = (achievement) => {
-    let achievementDiv = document.createElement('div')
-    achievementDiv.className = 'achievement'
-    achievementDiv.innerHTML = `${achievement.name}`
-    innerModal.insertAdjacentElement('beforeend', achievementDiv)
-}
-
-let span = qs('#mainMenu');
-
-document.addEventListener('click', e => {
-    if (e.target.matches('#mainMenu')) {
-        console.log('button')
-        modal.style.display = "none";
-    }
-})
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (e) {
-    if (e.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
-

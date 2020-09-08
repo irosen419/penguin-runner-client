@@ -7,12 +7,11 @@ class UserAchievement {
     }
 
     check() {
-        fetch('http://localhost:3000/users/1')
+        return fetch(this.achievementUrl)
             .then(resp => resp.json())
-            .then(console.log)
     }
 
-    twentyBomb(userId) {
+    fiftyBomb(userId) {
         let achievement = {
             "user_id": userId,
             "achievement_id": 1
@@ -30,7 +29,7 @@ class UserAchievement {
         return fetch(this.achievementUrl, options)
             .then(resp => resp.json())
     }
-    fiftyBomb(userId) {
+    hundoBomb(userId) {
         let achievement = {
             "user_id": userId,
             "achievement_id": 2
@@ -48,10 +47,65 @@ class UserAchievement {
         return fetch(this.achievementUrl, options)
             .then(resp => resp.json())
     }
-    hundoBomb(userId) {
+    twofiddyBomb(userId) {
         let achievement = {
             "user_id": userId,
             "achievement_id": 3
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(achievement)
+        }
+
+        return fetch(this.achievementUrl, options)
+            .then(resp => resp.json())
+    }
+
+    twentyFiveInGame(userId) {
+        let achievement = {
+            "user_id": userId,
+            "achievement_id": 4
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(achievement)
+        }
+
+        return fetch(this.achievementUrl, options)
+            .then(resp => resp.json())
+    }
+    fiddyInGame(userId) {
+        let achievement = {
+            "user_id": userId,
+            "achievement_id": 5
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(achievement)
+        }
+
+        return fetch(this.achievementUrl, options)
+            .then(resp => resp.json())
+    }
+    hundoInGame(userId) {
+        let achievement = {
+            "user_id": userId,
+            "achievement_id": 6
         }
 
         const options = {

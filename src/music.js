@@ -19,14 +19,19 @@ class Sound {
         this.sound.pause();
     }
 
+    raiseVolume() {
+        if (this.sound.volume < 1) { this.sound.volume += 0.03 }
+    }
+
     lowerVolume() {
         if (this.sound.volume > 0) {
-            this.sound.volume -= 0.1
+            this.sound.volume -= 0.03
             console.log(this.sound.volume)
         }
     }
 
-    raiseVolume() {
-        if (this.sound.volume < 1) { this.sound.volume += 0.1 }
+    muteVolume() {
+        this.sound.volume = 0.00
     }
+
 }
