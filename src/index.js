@@ -5,6 +5,8 @@ const canvas = qs("#game")
 const ctx = canvas.getContext("2d")
 let achievementDiv = qs('#achievement')
 let form = qs('form')
+let h1 = qs('h1')
+let restartBtn = qs('#restart')
 
 let score;
 let scoreText;
@@ -82,29 +84,40 @@ const findAchievements = () => {
     achievement.check().then(data => {
         for (const userAchievement of data) {
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 1) {
-                achievementList.push(userAchievement.achievement_id)
-                fiftyRocks = true
+                if (!achievementList.includes(userAchievement.achievement_id)) {
+                    achievementList.push(userAchievement.achievement_id)
+                    fiftyRocks = true
+                }
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 2) {
-                achievementList.push(userAchievement.achievement_id)
-                hundoRocks = true
+                if (!achievementList.includes(userAchievement.achievement_id)) {
+                    achievementList.push(userAchievement.achievement_id)
+                    hundoRocks = true
+                }
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 3) {
-                achievementList.push(userAchievement.achievement_id)
-                twofiddyRocks = true
+                if (!achievementList.includes(userAchievement.achievement_id)) {
+                    achievementList.push(userAchievement.achievement_id)
+                    twofiddyRocks = true
+                }
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 4) {
-                achievementList.push(userAchievement.achievement_id)
-                console.log('done')
-                twentyFiveGameRocks = true
+                if (!achievementList.includes(userAchievement.achievement_id)) {
+                    achievementList.push(userAchievement.achievement_id)
+                    twentyFiveGameRocks = true
+                }
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 5) {
-                achievementList.push(userAchievement.achievement_id)
-                fiddyGameRocks = true
+                if (!achievementList.includes(userAchievement.achievement_id)) {
+                    achievementList.push(userAchievement.achievement_id)
+                    fiddyGameRocks = true
+                }
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 6) {
-                achievementList.push(userAchievement.achievement_id)
-                hundoGameRocks = true
+                if (!achievementList.includes(userAchievement.achievement_id)) {
+                    achievementList.push(userAchievement.achievement_id)
+                    hundoGameRocks = true
+                }
             }
         }
     })
@@ -209,6 +222,7 @@ const giveAchievement = (rockCounter) => {
         achievement.fiftyBomb(userId).then(obj => {
             fiftyRocks = true
             displayAchievement()
+            // gameOver(animation)
         })
     }
 
@@ -217,6 +231,7 @@ const giveAchievement = (rockCounter) => {
         achievement.hundoBomb(userId).then(obj => {
             hundoRocks = true
             displayAchievement()
+            // gameOver(animation)
         })
     }
 
@@ -225,6 +240,7 @@ const giveAchievement = (rockCounter) => {
         achievement.twofiddyBomb(userId).then(obj => {
             twofiddyRocks = true
             displayAchievement()
+            // gameOver(animation)
         })
     }
 
@@ -235,6 +251,7 @@ const giveAchievement = (rockCounter) => {
             console.log('25 in a game')
             twentyFiveGameRocks = true
             displayAchievement()
+            // gameOver(animation)
         })
     }
     if (gameRocks >= 5 && !fiddyGameRocks) {
@@ -242,20 +259,22 @@ const giveAchievement = (rockCounter) => {
         achievement.fiddyInGame(userId).then(obj => {
             fiddyGameRocks = true
             displayAchievement()
+            // gameOver(animation)
         })
     }
-    if (gameRocks >= 100 && !hundoGameRocks) {
+    if (gameRocks >= 10 && !hundoGameRocks) {
         let achievement = new UserAchievement("100 Rocks Dodged in One Game")
         achievement.hundoInGame(userId).then(obj => {
             hundoGameRocks = true
             displayAchievement()
+            // gameOver(animation)
         })
     }
 
 }
 
 const displayAchievement = () => {
-    achievementDiv.innerHTML = `<img src="styles/images/trophy.png">`
+    achievementDiv.innerHTML = `<img id ="trophy" src="styles/images/trophy.png">`
     setTimeout(function () { achievementDiv.innerHTML = "" }, 3000)
 }
 
@@ -303,6 +322,7 @@ function update() {
             console.log(userId)
 
             giveAchievement(rockCounter, gameRocks)
+            gameOver(animation)
         }
 
         r.update()
@@ -323,12 +343,21 @@ function update() {
 
     gameSpeed += 0.005
 
-    document.addEventListener('keydown', e => {
-        if (e.key === 'p') {
-            cancelAnimationFrame(animation)
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-            form.removeAttribute("hidden")
-            music.stopMusic()
-        }
-    })
 }
+
+function gameOver(animation) {
+    cancelAnimationFrame(animation)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    music.stopMusic()
+    h1.style.display = "block"
+    restartBtn.style.display = "block"
+}
+
+document.addEventListener('click', e => {
+    if (e.target.matches('#restart')) {
+        h1.style.display = "none"
+        restartBtn.style.display = "none"
+        console.log(gameSpeed)
+        start(highscore)
+    }
+})
