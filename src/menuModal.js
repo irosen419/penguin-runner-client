@@ -23,6 +23,7 @@ document.addEventListener('click', e => {
     if (e.target.matches('#achievements')) {
         innerModal.innerHTML = ""
         let achievements = new Achievement()
+        findAchievements()
         achievements.fetchAchievements().then(achs => {
             innerModal.innerHTML = `<h3>YOUR ACHIEVEMENTS</h3></br>`
             for (const ach of achs) {

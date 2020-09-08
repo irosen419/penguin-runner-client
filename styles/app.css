@@ -8,9 +8,8 @@ html, body {
     height:100%
 }
 
- body {
+body {
     display: block;
-    /* background-image: url("https://opengameart.org/sites/default/files/rock_4.png");  */
     background-image: url("https://i.ibb.co/Vx1BWrC/Chilly-Road-Background-V1-1.png");
 
     position: relative;
@@ -29,15 +28,38 @@ form #submitBtn {
     font-size: 22.5px;
 }
 
+h1, #restart{
+    display: none;
+    position: absolute;
+}
+
+h1 {
+    top: 25%;
+    left: 40%;
+
+    font-size: 52px;
+}
+
+#restart {
+    top: 35%;
+    left: 45.5%;
+
+    font-size: 35px;
+}
+
 div#achievement {
     position: absolute;
-    top: 30%;
-    left: 20%;
+    top: 42.5%;
+    left: 21.75%;
     margin: auto;
     width: 60%;
     padding: 10px;
-
+    
     text-align: center;
+}
+
+img#trophy {
+    height: 250px;
 }
 
 div#achievement img {
