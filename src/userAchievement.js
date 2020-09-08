@@ -2,35 +2,22 @@ class UserAchievement {
     constructor(name) {
         this.name = name
 
-        this.achievementUrl = 'http://localhost:3000/user_achievements'
+        this.achievementUrl = 'http://localhost:3000/user_achievements/'
 
     }
 
-    twentyBomb(userId) {
+    check() {
+        return fetch(this.achievementUrl)
+            .then(resp => resp.json())
+    }
+
+    fiftyBomb(userId) {
         let achievement = {
             "user_id": userId,
             "achievement_id": 1
         }
 
-        this.options = {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(achievement)
-        }
-
-        return fetch(this.achievementUrl, this.options)
-            .then(resp => resp.json())
-    }
-    fiftytyBomb(userId) {
-        let achievement = {
-            "user_id": userId,
-            "achievement_id": 2
-        }
-
-        this.options = {
+        const options = {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -45,10 +32,85 @@ class UserAchievement {
     hundoBomb(userId) {
         let achievement = {
             "user_id": userId,
+            "achievement_id": 2
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(achievement)
+        }
+
+        return fetch(this.achievementUrl, options)
+            .then(resp => resp.json())
+    }
+    twofiddyBomb(userId) {
+        let achievement = {
+            "user_id": userId,
             "achievement_id": 3
         }
 
-        this.options = {
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(achievement)
+        }
+
+        return fetch(this.achievementUrl, options)
+            .then(resp => resp.json())
+    }
+
+    twentyFiveInGame(userId) {
+        console.log(userId)
+        let achievement = {
+            "user_id": userId,
+            "achievement_id": 4
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(achievement)
+        }
+
+        return fetch(this.achievementUrl, options)
+            .then(resp => resp.json())
+            .then(console.log)
+    }
+    fiddyInGame(userId) {
+        let achievement = {
+            "user_id": userId,
+            "achievement_id": 5
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(achievement)
+        }
+
+        return fetch(this.achievementUrl, options)
+            .then(resp => resp.json())
+    }
+    hundoInGame(userId) {
+        let achievement = {
+            "user_id": userId,
+            "achievement_id": 6
+        }
+
+        const options = {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

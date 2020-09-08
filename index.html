@@ -12,23 +12,41 @@
     <script defer src="src/rock.js"></script>
     <script defer src="src/player.js"></script>
     <script defer src="src/userAchievement.js"></script>
+    <script defer src="src/Achievement.js"></script>
+    <script defer src="src/music.js"></script>
     <script defer src="src/index.js"></script>
+    <script defer src="src/menuModal.js"></script>
 
 </head>
 
 <body>
 
-    <!-- <iframe allowfullscreen loop autoplay style="width: 0; height: 0; border: 0; border: none; position: absolute;"
-        src="https://www.youtube.com/embed/3T5x512SQBA?rel=0&modestbranding=1&autohide=1&mute=0&showinfo=0&controls=1&autoplay=1&loop=1"
-        wmode="transparent" frameborder="0"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe> -->
     <form id="signin-form">
         <label for="fname">Username: </label>
-        <input type="text" id="username" name="username">
-        <input type="submit" value="Login or Sign Up">
+        <input id="nameInput" type="text" id="username" name="username" style="height: 30px" size="30">
+        <input id="submitBtn" class="hover" type="submit" value="Login or Sign Up">
     </form>
 
     <div id="achievement"></div>
+
+    <!-- Trigger/Open The Modal -->
+    <button id="myBtn" class="hover">Main Menu</button>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div id="modal-content">
+            <!-- <span class="close" class="hover">&times;</span>
+            <button class="hover" id="achievements">ACHIEVEMENTS</button>
+            <button class="hover" id="leaderboard">LEADERBOARD</button>
+            <h3>Audio Controls:</h3>
+            <p>Volume down: - </p>
+            <p>Volume up: + </p> -->
+        </div>
+
+    </div>
+
 
     <canvas id='game' height="400" width="640">
     </canvas>

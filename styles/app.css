@@ -19,7 +19,14 @@ html, body {
 
 form {
     position: absolute;
-    top: 25;
+    top: 25%;
+    left: 40%;
+
+    font-size: 26px;
+}
+
+form #submitBtn {
+    font-size: 22.5px;
 }
 
 div#achievement {
@@ -33,7 +40,85 @@ div#achievement {
     text-align: center;
 }
 
-div#achievement h2{
-    color: rgba(1, 36, 177, 0.699);
-    font-size: 32px;
+div#achievement img {
+    height: 350px;
 }
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  #modal-content {
+    position: relative;
+
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%; /* Could be more or less, depending on screen size */
+  }
+
+  #modal-content button {
+    margin: 0 auto 10px auto;
+    width: 200px;
+    max-width: 100%;
+    font-size: 16px;
+
+    word-wrap: break-word;
+  }
+
+  /* Open Button*/
+
+  #myBtn {
+    display: none;
+    position: absolute;
+    top: 5%;
+    right: 2%;
+
+    font-size: 26px;
+  }
+
+  .hover {
+      padding: 5px;
+  }
+
+  .hover:hover {
+      cursor: pointer;
+  }
+  
+  /* The Close Button */
+  .close {
+    position: absolute;
+    top: 0;
+    right: 2%;
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #achievements, #leaderboard {
+      
+  }
