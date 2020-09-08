@@ -15,6 +15,8 @@ let rocks = [];
 let gameSpeed
 let KEYS = {};
 
+// Music
+let music;
 
 // User Attributes
 let userId;
@@ -27,6 +29,9 @@ let twentyRocks = false
 let fiftyRocks = false
 let hundoRocks = false
 
+// Modal Page Variables
+
+let achievementList = []
 
 
 document.addEventListener('submit', e => {
@@ -52,7 +57,6 @@ const signIn = (userId) => {
     userFetch.getUser(userId).then(user => {
         highscore = user.highscore;
         rockCounter = user.rocks_dodged;
-        // debugger
         start(highscore);
     })
 }
@@ -71,14 +75,16 @@ const findAchievements = (id) => {
     achievement.check().then(data => {
         for (const userAchievement of data) {
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 1) {
+                achievementList.push(userAchievement.achievement_id)
                 twentyRocks = true
-                console.log(fiftyRocks, hundoRocks)
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 2) {
+                achievementList.push(userAchievement.achievement_id)
                 fiftyRocks = true
                 console.log("You already have the 50 bomb achievement")
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 3) {
+                achievementList.push(userAchievement.achievement_id)
                 hundoRocks = true
                 console.log("You already have the 100 bomb achievement")
             }
@@ -140,6 +146,11 @@ function RandomIntInRange(min, max) {
 }
 
 function start(highscore) {
+    music = new Sound('styles/mp3/Chilly Road by Ryan Flynn .wav')
+    music.createAudioTag()
+    music.loop = true
+    music.playMusic()
+
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
@@ -154,8 +165,16 @@ function start(highscore) {
     player = new Player(250, 0, 50, 50, '#FF5858')
 
     scoreText = new Text("Score: " + score, 25, 25, "left", "#212121", "20")
-    highscoreText = new Text("Highscore: " + highscore, canvas.width - 25, 25, "right", "#212121", "20")
+    highscoreText = new Text("High Score: " + highscore, canvas.width - 25, 25, "right", "#212121", "20")
     requestAnimationFrame(update)
+
+    document.addEventListener('keydown', e => {
+        if (e.key === '-') {
+            music.lowerVolume()
+        } else if (e.key === '=') {
+            music.raiseVolume()
+        }
+    })
 }
 
 // Chech For and Display Achievements
@@ -200,6 +219,11 @@ let spawnTimer = initialSpawnTimer
 function update() {
     const animation = requestAnimationFrame(update);
 
+    window.addEventListener('resize', function () {
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+    })
+
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     spawnTimer--;
@@ -217,7 +241,6 @@ function update() {
     // Spawn Rocks
     for (let i = 0; i < rocks.length; i++) {
         let r = rocks[i]
-
 
         if (r.x + r.w < 0) {
             rocks.splice(i, 1)
@@ -246,7 +269,7 @@ function update() {
 
     if (score > highscore) {
         highscore = score;
-        highscoreText.t = "Highscore: " + highscore;
+        highscoreText.t = "High Score: " + highscore;
     }
 
     highscoreText.draw()
@@ -258,8 +281,75 @@ function update() {
             cancelAnimationFrame(animation)
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             form.removeAttribute("hidden")
+            music.stopMusic()
         }
     })
-
 }
+
+// Modal Logic
+
+let modal = document.getElementById("myModal");
+let btn = document.getElementById("myBtn");
+
+btn.onclick = function () {
+    modal.style.display = "block";
+}
+
+let innerModal = qs('#modal-content')
+const modalMenu = `
+    <span class="close" class="hover" id="mainMenu">&times;</span>
+    <button class="hover" id="achievements">ACHIEVEMENTS</button>
+    <button class="hover" id="leaderboard">LEADERBOARD</button>
+    <h3>Audio Controls:</h3>
+    <p>Volume down: - </p>
+    <p>Volume up: + </p>
+`
+innerModal.innerHTML = modalMenu
+
+document.addEventListener('click', e => {
+    if (e.target.matches('#achievements')) {
+        innerModal.innerHTML = ""
+        let achievements = new Achievement()
+        achievements.fetchAchievements().then(achs => {
+            innerModal.innerHTML = `<h3>YOUR ACHIEVEMENTS</h3>`
+            for (const ach of achs) {
+                if (achievementList.includes(ach.id)) {
+                    renderAchievement(ach)
+                }
+            }
+            const span = document.createElement('span')
+            span.id = "achievementCloseBtn"
+            span.className = "close hover"
+            span.innerHTML = `&times;`
+            innerModal.insertAdjacentElement('beforeend', span)
+        })
+    } else if (e.target.matches('#achievementCloseBtn')) {
+        innerModal.innerHTML = modalMenu
+    }
+})
+
+
+const renderAchievement = (achievement) => {
+    let achievementDiv = document.createElement('div')
+    achievementDiv.className = 'achievement'
+    achievementDiv.innerHTML = `${achievement.name}`
+    innerModal.insertAdjacentElement('beforeend', achievementDiv)
+}
+
+let span = qs('#mainMenu');
+
+document.addEventListener('click', e => {
+    if (e.target.matches('#mainMenu')) {
+        console.log('button')
+        modal.style.display = "none";
+    }
+})
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (e) {
+    if (e.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
 

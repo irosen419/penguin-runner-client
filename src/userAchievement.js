@@ -7,8 +7,9 @@ class UserAchievement {
     }
 
     check() {
-        return fetch(this.achievementUrl)
+        fetch('http://localhost:3000/users/1')
             .then(resp => resp.json())
+            .then(console.log)
     }
 
     twentyBomb(userId) {
