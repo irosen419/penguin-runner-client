@@ -77,7 +77,7 @@ const signUp = (username) => {
     })
 }
 
-const findAchievements = (id) => {
+const findAchievements = () => {
     let achievement = new UserAchievement("AchievementFinder")
     achievement.check().then(data => {
         for (const userAchievement of data) {
@@ -94,13 +94,17 @@ const findAchievements = (id) => {
                 twofiddyRocks = true
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 4) {
+                achievementList.push(userAchievement.achievement_id)
+                console.log('done')
                 twentyFiveGameRocks = true
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 5) {
-                fiddyGameRocks = false
+                achievementList.push(userAchievement.achievement_id)
+                fiddyGameRocks = true
             }
             if (userAchievement.user_id == userId && userAchievement.achievement_id == 6) {
-                hundoGameRocks = false
+                achievementList.push(userAchievement.achievement_id)
+                hundoGameRocks = true
             }
         }
     })
@@ -117,7 +121,7 @@ const grabUsername = (users, username) => {
             userId = user.id
             console.log(`Your current user is ${user.id}`)
             console.log("You are signing in")
-            findAchievements(user.id)
+            findAchievements()
             signIn(userId)
         } else {
             console.log('You are signing up. Thanks!')
@@ -199,17 +203,16 @@ function start(highscore) {
 
 // Chech For and Display Achievements
 
-const giveAchievement = (rockCounter, userId) => {
-    if (rockCounter >= 50 && !twentyRocks) {
+const giveAchievement = (rockCounter) => {
+    if (rockCounter >= 50 && !fiftyRocks) {
         let achievement = new UserAchievement("50 Lifetime Rocks Dodged")
         achievement.fiftyBomb(userId).then(obj => {
-            console.log("You have been given the 20 achievement")
             fiftyRocks = true
             displayAchievement()
         })
     }
 
-    if (rockCounter >= 100 && !fiftyRocks) {
+    if (rockCounter >= 100 && !hundoRocks) {
         let achievement = new UserAchievement("100 Lifetime Rocks Dodged")
         achievement.hundoBomb(userId).then(obj => {
             hundoRocks = true
@@ -217,22 +220,24 @@ const giveAchievement = (rockCounter, userId) => {
         })
     }
 
-    if (rockCounter >= 250 && !hundoRocks) {
-        let achievement = new UserAchievement("250 Rocks Dodged")
+    if (rockCounter >= 250 && !twofiddyRocks) {
+        let achievement = new UserAchievement("250 Lifetime Rocks Dodged")
         achievement.twofiddyBomb(userId).then(obj => {
             twofiddyRocks = true
             displayAchievement()
         })
     }
 
-    if (gameRocks >= 25 && !twentyfiveGameRocks) {
+    if (gameRocks >= 1 && !twentyFiveGameRocks) {
         let achievement = new UserAchievement("25 Rocks Dodged in One Game")
+        console.log(userId)
         achievement.twentyFiveInGame(userId).then(obj => {
-            twentyfiveGameRocks = true
+            console.log('25 in a game')
+            twentyFiveGameRocks = true
             displayAchievement()
         })
     }
-    if (gameRocks >= 50 && !fiddyGameRocks) {
+    if (gameRocks >= 5 && !fiddyGameRocks) {
         let achievement = new UserAchievement("50 Rocks Dodged in One Game")
         achievement.fiddyInGame(userId).then(obj => {
             fiddyGameRocks = true
@@ -286,7 +291,7 @@ function update() {
             rocks.splice(i, 1)
             rockCounter++
             gameRocks++
-            console.log(gamRocks)
+            console.log(gameRocks)
         }
 
         if (player.x < r.x + r.w && player.x + player.w > r.x && player.y < r.y + r.h && player.y + player.h > r.y) {
@@ -295,8 +300,9 @@ function update() {
             spawnTimer = initialSpawnTimer;
             gameSpeed = 3;
             userFetch.patch(highscore, rockCounter, userId)
+            console.log(userId)
 
-            giveAchievement(rockCounter, gameRocks, userId)
+            giveAchievement(rockCounter, gameRocks)
         }
 
         r.update()
