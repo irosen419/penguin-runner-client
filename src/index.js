@@ -5,8 +5,8 @@ const canvas = qs("#game")
 const ctx = canvas.getContext("2d")
 let achievementDiv = qs('#achievement')
 let form = qs('form')
+let gameOverDiv = qs('#game-over')
 let h1 = qs('h1')
-let restartBtn = qs('#restart')
 
 let score;
 let scoreText;
@@ -15,7 +15,8 @@ let highscoreText;
 let player;
 let gravity;
 let rocks = [];
-let gameSpeed
+let coins = [];
+let gameSpeed;
 let KEYS = {};
 let users = [];
 
@@ -172,6 +173,15 @@ function spawnRock() {
     rocks.push(rock)
 }
 
+function spawnCoin() {
+    let size = 30
+    let randomHeight = RandomIntInRange(1, 10)
+
+    let coin = new Coin(canvas.width + size, canvas.height - (size * randomHeight), 23, 0, 2 * Math.PI, '#FAD25A')
+
+    coins.push(coin)
+}
+
 function RandomIntInRange(min, max) {
     return Math.round(Math.random() * (max - min) + min)
 }
@@ -189,7 +199,6 @@ function start(highscore) {
 
     gameSpeed = 3;
     gravity = 1;
-
 
     score = 0;
 
@@ -222,7 +231,6 @@ const giveAchievement = (rockCounter) => {
         achievement.fiftyBomb(userId).then(obj => {
             fiftyRocks = true
             displayAchievement()
-            // gameOver(animation)
         })
     }
 
@@ -231,7 +239,6 @@ const giveAchievement = (rockCounter) => {
         achievement.hundoBomb(userId).then(obj => {
             hundoRocks = true
             displayAchievement()
-            // gameOver(animation)
         })
     }
 
@@ -240,7 +247,6 @@ const giveAchievement = (rockCounter) => {
         achievement.twofiddyBomb(userId).then(obj => {
             twofiddyRocks = true
             displayAchievement()
-            // gameOver(animation)
         })
     }
 
@@ -251,7 +257,6 @@ const giveAchievement = (rockCounter) => {
             console.log('25 in a game')
             twentyFiveGameRocks = true
             displayAchievement()
-            // gameOver(animation)
         })
     }
     if (gameRocks >= 5 && !fiddyGameRocks) {
@@ -259,7 +264,6 @@ const giveAchievement = (rockCounter) => {
         achievement.fiddyInGame(userId).then(obj => {
             fiddyGameRocks = true
             displayAchievement()
-            // gameOver(animation)
         })
     }
     if (gameRocks >= 10 && !hundoGameRocks) {
@@ -267,7 +271,6 @@ const giveAchievement = (rockCounter) => {
         achievement.hundoInGame(userId).then(obj => {
             hundoGameRocks = true
             displayAchievement()
-            // gameOver(animation)
         })
     }
 
@@ -280,15 +283,51 @@ const displayAchievement = () => {
 
 let initialSpawnTimer = 200
 let spawnTimer = initialSpawnTimer
+let initialCoinSpawnTimer = -150
+let coinSpawnTimer = initialCoinSpawnTimer
 function update() {
     const animation = requestAnimationFrame(update);
 
-    window.addEventListener('resize', function () {
-        canvas.height = window.innerHeight;
-        canvas.width = window.innerWidth;
-    })
+    // window.addEventListener('resize', function () {
+    //     canvas.height = window.innerHeight;
+    //     canvas.width = window.innerWidth;
+    // })
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    // Coin Spawn Timer
+
+    coinSpawnTimer++;
+
+    if (coinSpawnTimer >= 0) {
+
+        spawnCoin()
+
+        coinSpawnTimer = initialCoinSpawnTimer + (gameSpeed * 8)
+
+        if (coinSpawnTimer > -60) {
+            coinSpawnTimer = -60
+        }
+    }
+
+
+    // Spawn Coins
+
+    for (let i = 0; i < coins.length; i++) {
+        let c = coins[i]
+
+        if (player.x < (c.x + c.r + 5) && player.x + player.w > c.x && player.y < (c.y + c.r + 5) && player.y + player.h > c.y) {
+            coins.splice(i, 1)
+            console.log('hello')
+            score += 10;
+            console.log(score)
+            coinSpawnTimer = initialCoinSpawnTimer;
+        }
+
+        c.update()
+    }
+
+    // Rock Spawn Timer
 
     spawnTimer--;
 
@@ -349,15 +388,12 @@ function gameOver(animation) {
     cancelAnimationFrame(animation)
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     music.stopMusic()
-    h1.style.display = "block"
-    restartBtn.style.display = "block"
+    gameOverDiv.style.display = "flex"
 }
 
 document.addEventListener('click', e => {
     if (e.target.matches('#restart')) {
-        h1.style.display = "none"
-        restartBtn.style.display = "none"
-        console.log(gameSpeed)
+        gameOverDiv.style.display = "none"
         start(highscore)
     }
 })

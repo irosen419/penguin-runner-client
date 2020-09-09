@@ -24,6 +24,7 @@ class Player {
 
         if (KEYS['ShiftLeft'] || KEYS['KeyS']) {
             this.h = this.originalHeight / 2;
+            this.dy += 1.5
         } else {
             this.h = this.originalHeight
         }
