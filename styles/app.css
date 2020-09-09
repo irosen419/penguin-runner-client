@@ -28,22 +28,22 @@ form #submitBtn {
     font-size: 22.5px;
 }
 
-h1, #restart{
+div#game-over {
     display: none;
     position: absolute;
-}
 
-h1 {
     top: 25%;
     left: 40%;
 
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
     font-size: 52px;
 }
 
 #restart {
-    top: 35%;
-    left: 45.5%;
-
     font-size: 35px;
 }
 

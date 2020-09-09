@@ -9,6 +9,7 @@
 
     <script defer src="src/fetches.js"></script>
     <script defer src="src/text.js"></script>
+    <script defer src="src/coin.js"></script>
     <script defer src="src/rock.js"></script>
     <script defer src="src/player.js"></script>
     <script defer src="src/userAchievement.js"></script>
@@ -27,26 +28,21 @@
         <input id="submitBtn" class="hover" type="submit" value="Login or Sign Up">
     </form>
 
-    <h1>GAME OVER</h1>
-    <button id="restart" class="hover">RESTART</button>
+    <div id="game-over">
+        <h1>GAME OVER</h1>
+        <button id="restart" class="hover">RESTART</button>
+    </div>
 
     <div id="achievement"></div>
 
-    <!-- Trigger/Open The Modal -->
+
     <button id="myBtn" class="hover">Main Menu</button>
 
-    <!-- The Modal -->
+
     <div id="myModal" class="modal">
 
-        <!-- Modal content -->
-        <div id="modal-content">
-            <!-- <span class="close" class="hover">&times;</span>
-            <button class="hover" id="achievements">ACHIEVEMENTS</button>
-            <button class="hover" id="leaderboard">LEADERBOARD</button>
-            <h3>Audio Controls:</h3>
-            <p>Volume down: - </p>
-            <p>Volume up: + </p> -->
-        </div>
+
+        <div id="modal-content"></div>
 
     </div>
 

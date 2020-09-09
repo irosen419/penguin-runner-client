@@ -82,7 +82,7 @@ const renderLeaderboard = (users) => {
 const renderAchievement = (achievement) => {
     let achievementDiv = ce('div')
     achievementDiv.className = 'achievement'
-    achievementDiv.innerHTML = `${achievement.name}`
+    achievementDiv.innerHTML = `${achievement.name}</br></br>`
     innerModal.insertAdjacentElement('beforeend', achievementDiv)
 }
 
