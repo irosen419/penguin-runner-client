@@ -20,6 +20,11 @@ let gameSpeed;
 let KEYS = {};
 let users = [];
 
+// Sprite Images
+const images = {};
+images.penguin = new Image();
+images.penguin.src = 'styles/images/copy_of_256x256.png';
+
 // Music
 let music;
 
@@ -202,11 +207,11 @@ function start(highscore) {
 
     score = 0;
 
-    player = new Player(250, 0, 50, 50, '#FF5858')
-
+    player = new Player(288, 0, 27.5, 50, 'rgba(255, 255, 255, 0)')
+    penguin = new Player(250, 0, 95, 101, 'rgba(255, 255, 255, 0)')
     scoreText = new Text("Score: " + score, 25, 25, "left", "#212121", "20")
     highscoreText = new Text("High Score: " + highscore, canvas.width - 25, 25, "right", "#212121", "20")
-    setInterval(requestAnimationFrame(update), 1000 / 30)
+    window.requestAnimationFrame(update)
 
     document.addEventListener('keydown', e => {
         if (e.key === '-') {
@@ -368,6 +373,8 @@ function update() {
     }
 
     player.animate()
+    penguin.animate()
+
 
     score++;
     scoreText.t = "Score:" + score;
@@ -380,7 +387,7 @@ function update() {
 
     highscoreText.draw()
 
-    gameSpeed += 0.005
+    gameSpeed += 0.003
 
 }
 
