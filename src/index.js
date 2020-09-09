@@ -200,7 +200,6 @@ function start(highscore) {
     gameSpeed = 3;
     gravity = 1;
 
-
     score = 0;
 
     player = new Player(250, 0, 50, 50, '#FF5858')
