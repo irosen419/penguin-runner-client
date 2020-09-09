@@ -16,14 +16,25 @@ let player;
 let gravity;
 let rocks = [];
 let coins = [];
+let coinSprites = [];
 let gameSpeed;
 let KEYS = {};
 let users = [];
+
+//FPS STUFF
+let fps = 120;
+let now;
+let then = Date.now();
+let interval = 1000 / fps;
+let delta;
 
 // Sprite Images
 const images = {};
 images.penguin = new Image();
 images.penguin.src = 'styles/images/copy_of_256x256.png';
+
+images.coins = new Image()
+images.coins.src = 'styles/images/smallcoins-removebg-preview.png'
 
 // Music
 let music;
@@ -170,7 +181,7 @@ function spawnRock() {
     let size = RandomIntInRange(20, 70);
     let type = RandomIntInRange(0, 1)
 
-    let rock = new Rock(canvas.width + size, canvas.height - size, size, size, '#2484E4')
+    let rock = new Rock(canvas.width + size, canvas.height - size, size, size, '#0F66E9')
 
     if (type == 1) {
         rock.y -= player.originalHeight - 10
@@ -181,10 +192,12 @@ function spawnRock() {
 function spawnCoin() {
     let size = 30
     let randomHeight = RandomIntInRange(1, 10)
+    let height = randomHeight
 
-    let coin = new Coin(canvas.width + size, canvas.height - (size * randomHeight), 23, 0, 2 * Math.PI, '#FAD25A')
-
-    coins.push(coin)
+    // let coin = new Coin(canvas.width + size, canvas.height - (size * height), 23, 0, 2 * Math.PI, 'rgba(255, 255, 255, 0)')
+    let coinSprite = new Coin(canvas.width + size, canvas.height - (size * height), 50, 0, 2 * Math.PI, '#FAD25A')
+    // coins.push(coin)
+    coinSprites.push(coinSprite)
 }
 
 function RandomIntInRange(min, max) {
@@ -291,103 +304,110 @@ let spawnTimer = initialSpawnTimer
 let initialCoinSpawnTimer = -150
 let coinSpawnTimer = initialCoinSpawnTimer
 function update() {
-    const animation = requestAnimationFrame(update);
+
 
     // window.addEventListener('resize', function () {
     //     canvas.height = window.innerHeight;
     //     canvas.width = window.innerWidth;
     // })
+    now = Date.now();
+    delta = now - then;
+    if (delta > interval) {
+        const animation = requestAnimationFrame(update);
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+        // Coin Spawn Timer
 
-    // Coin Spawn Timer
+        coinSpawnTimer++;
 
-    coinSpawnTimer++;
+        if (coinSpawnTimer >= 0) {
 
-    if (coinSpawnTimer >= 0) {
+            spawnCoin()
 
-        spawnCoin()
+            coinSpawnTimer = initialCoinSpawnTimer + (gameSpeed * 8)
 
-        coinSpawnTimer = initialCoinSpawnTimer + (gameSpeed * 8)
-
-        if (coinSpawnTimer > -60) {
-            coinSpawnTimer = -60
-        }
-    }
-
-
-    // Spawn Coins
-
-    for (let i = 0; i < coins.length; i++) {
-        let c = coins[i]
-
-        if (player.x < (c.x + c.r + 5) && player.x + player.w > c.x && player.y < (c.y + c.r + 5) && player.y + player.h > c.y) {
-            coins.splice(i, 1)
-            console.log('hello')
-            score += 10;
-            console.log(score)
-            coinSpawnTimer = initialCoinSpawnTimer;
+            if (coinSpawnTimer > -60) {
+                coinSpawnTimer = -60
+            }
         }
 
-        c.update()
-    }
 
-    // Rock Spawn Timer
+        // Spawn Coins
 
-    spawnTimer--;
+        for (let i = 0; i < coinSprites.length; i++) {
+            let c = coinSprites[i]
+            // let cS = coinSprites[i]
 
-    if (spawnTimer <= 0) {
-        spawnRock()
+            if (player.x < (c.x + c.r) && player.x + player.w > c.x && player.y < (c.y + c.r - 5) && player.y + player.h > c.y) {
+                coinSprites.splice(i, 1)
+                console.log('hello')
+                score += 10;
+                console.log(score)
+                coinSpawnTimer = initialCoinSpawnTimer;
+            }
 
-        spawnTimer = initialSpawnTimer - (gameSpeed * 8)
-
-        if (spawnTimer < 60) {
-            spawnTimer = 60
-        }
-    }
-
-    // Spawn Rocks
-    for (let i = 0; i < rocks.length; i++) {
-        let r = rocks[i]
-
-        if (r.x + r.w < 0) {
-            rocks.splice(i, 1)
-            rockCounter++
-            gameRocks++
-            console.log(gameRocks)
+            // c.update()
+            c.updateSprite()
         }
 
-        if (player.x < r.x + r.w && player.x + player.w > r.x && player.y < r.y + r.h && player.y + player.h > r.y) {
-            rocks = [];
-            score = 0;
-            spawnTimer = initialSpawnTimer;
-            gameSpeed = 3;
-            userFetch.patch(highscore, rockCounter, userId)
-            console.log(userId)
+        // Rock Spawn Timer
 
-            giveAchievement(rockCounter, gameRocks)
-            gameOver(animation)
+        spawnTimer--;
+
+        if (spawnTimer <= 0) {
+            spawnRock()
+
+            spawnTimer = initialSpawnTimer - (gameSpeed * 8)
+
+            if (spawnTimer < 60) {
+                spawnTimer = 60
+            }
         }
 
-        r.update()
+        // Spawn Rocks
+        for (let i = 0; i < rocks.length; i++) {
+            let r = rocks[i]
+
+            if (r.x + r.w < 0) {
+                rocks.splice(i, 1)
+                rockCounter++
+                gameRocks++
+                console.log(gameRocks)
+            }
+
+            if (player.x < r.x + r.w && player.x + player.w > r.x && player.y < r.y + r.h && player.y + player.h > r.y) {
+                rocks = [];
+                score = 0;
+                spawnTimer = initialSpawnTimer;
+                gameSpeed = 3;
+                userFetch.patch(highscore, rockCounter, userId)
+                console.log(userId)
+
+                giveAchievement(rockCounter, gameRocks)
+                gameOver(animation)
+            }
+
+            r.update()
+        }
+
+        player.animate()
+        penguin.animate()
+
+
+        score++;
+        scoreText.t = "Score:" + score;
+        scoreText.draw();
+
+        if (score > highscore) {
+            highscore = score;
+            highscoreText.t = "High Score: " + highscore;
+        }
+
+        highscoreText.draw()
+
+        gameSpeed += 0.003
     }
 
-    player.animate()
-    penguin.animate()
-
-
-    score++;
-    scoreText.t = "Score:" + score;
-    scoreText.draw();
-
-    if (score > highscore) {
-        highscore = score;
-        highscoreText.t = "High Score: " + highscore;
-    }
-
-    highscoreText.draw()
-
-    gameSpeed += 0.003
 
 }
 
