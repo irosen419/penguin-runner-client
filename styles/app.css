@@ -5,7 +5,7 @@
 }
 
 html, body {
-    height:100%
+    height: 100%;
 }
 
 body {
@@ -17,11 +17,27 @@ body {
     position: relative;
 }
 
+div#center {
+    margin: auto;
+    max-height: 50vh;
+    width: 50vw;
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+img {
+    height: 550px;
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-bottom: 0;
+}
 
 form {
-    position: absolute;
-    top: 25%;
-    left: 40%;
+    
+    margin: auto;
 
     font-size: 26px;
 }
@@ -39,6 +55,7 @@ div#game-over {
 
     flex-direction: column;
     justify-content: center;
+    text-align: center;
 }
 
 h1 {

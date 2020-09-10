@@ -13,10 +13,7 @@ const modalMenu = `
     <span class="close" class="hover" id="mainMenu">&times;</span>
     <button class="hover" id="achievements">ACHIEVEMENTS</button>
     <button class="hover" id="leaderboard">LEADERBOARD</button>
-    <h3>Audio Controls:</h3>
-    <p>Volume down: - </p>
-    <p>Volume up: + </p>
-    <p>Mute: m </p>
+    <button class="hover" id="controls">GAME CONTROLS</button>
 `
 innerModal.innerHTML = modalMenu
 
@@ -62,6 +59,25 @@ document.addEventListener('click', e => {
                 innerModal.insertAdjacentElement('beforeend', span)
             })
     } else if (e.target.matches('#leaderboardCloseBtn')) {
+        innerModal.innerHTML = modalMenu
+    } else if (e.target.matches('#controls')) {
+        innerModal.innerHTML = ""
+        innerModal.innerHTML = `
+        <h3>Movement: </h3>
+        <p>Jump: Tap or hold 'w' / 'Space'</p>
+        <p>Crouch: Hold 's' / 'Shift'</p>
+        <p><strong>- - - - -</strong></p>
+        <h3>Audio: </h3>
+        <p>Volume down: - </p>
+        <p>Volume up: + </p>
+        <p>Mute: 'm' </p>
+        `
+        const span = ce('span')
+        span.id = "controlsCloseBtn"
+        span.className = "close hover"
+        span.innerHTML = `&times;`
+        innerModal.insertAdjacentElement('beforeend', span)
+    } else if (e.target.matches('#controlsCloseBtn')) {
         innerModal.innerHTML = modalMenu
     }
 })

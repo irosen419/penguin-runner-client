@@ -4,9 +4,11 @@ const ce = (element) => document.createElement(element)
 const canvas = qs("#game")
 const ctx = canvas.getContext("2d")
 let achievementDiv = qs('#achievement')
+let centerDiv = qs('#center')
 let form = qs('form')
 let gameOverDiv = qs('#game-over')
 let h1 = qs('h1')
+let scoreH2 = qs('#game-over h2')
 
 let score;
 let scoreText;
@@ -209,6 +211,8 @@ function start(highscore) {
     music.loop = true
     music.playMusic()
 
+    centerDiv.remove()
+
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
@@ -290,7 +294,6 @@ const giveAchievement = (rockCounter) => {
             displayAchievement()
         })
     }
-
 }
 
 const displayAchievement = () => {
@@ -369,14 +372,14 @@ function update() {
 
         if (player.x < r.x + r.w && player.x + player.w > r.x && player.y < r.y + r.h && player.y + player.h > r.y) {
             rocks = [];
-            score = 0;
             spawnTimer = initialSpawnTimer;
             gameSpeed = 3;
             userFetch.patch(highscore, rockCounter, userId)
             console.log(userId)
 
             giveAchievement(rockCounter, gameRocks)
-            gameOver(animation)
+            gameOver(animation, score)
+            score = 0;
         }
 
         r.update()
@@ -403,10 +406,11 @@ function update() {
 
 }
 
-function gameOver(animation) {
+function gameOver(animation, score) {
     cancelAnimationFrame(animation)
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     music.stopMusic()
+    scoreH2.innerHTML = `Your score was: ${score}`
     gameOverDiv.style.display = "flex"
 }
 
