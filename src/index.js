@@ -403,7 +403,7 @@ function update() {
 
     highscoreText.draw()
 
-    gameSpeed += 0.003
+    gameSpeed += 0.0025
 
 
 

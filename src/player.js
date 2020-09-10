@@ -31,6 +31,11 @@ class Player {
                 this.frameY = 0
                 this.frameNumber = 3;
                 this.frameLimit = 7
+            } else if (e.code === 'KeyW' || e.code === 'Space') {
+                this.frameX = 0
+                this.frameY = 0
+                this.frameNumber = 3;
+                this.frameLimit = 7
             }
         })
 
@@ -64,13 +69,13 @@ class Player {
 
     jump() {
         if (this.grounded && this.jumpTimer == 0) {
+            this.jumpTimer = 1;
+            this.dy = -this.jumpForce;
+
             this.frameX = 3
             this.frameY = 3
             this.frameNumber = 6;
             this.frameLimit = 3;
-
-            this.jumpTimer = 1;
-            this.dy = -this.jumpForce;
         } else if (this.jumpTimer > 0 && this.jumpTimer < 15) {
             this.frameX = 3
             this.frameY = 3
