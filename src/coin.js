@@ -1,12 +1,13 @@
 class Coin {
-    constructor(x, y, r, sA, eA, c) {
+    constructor(x, y, w, h, c) {
         this.x = x
         this.y = y
-        this.r = r
-        this.sA = sA
-        this.eA = eA
+        this.w = w
+        this.h = h
         this.frameX = 0
         this.frameY = 0
+        this.frameNumber = 0
+        this.frameLimit = 4
         this.c = c
 
         this.dx = -gameSpeed;
@@ -27,23 +28,23 @@ class Coin {
 
     draw() {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, this.sA, this.eA)
         ctx.fillStyle = this.c;
-        ctx.fill()
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = '#003300';
-        ctx.stroke();
+        ctx.fillRect(this.x, this.y, this.w, this.h)
+        ctx.closePath()
     }
 
     drawCoin() {
-        drawSprite(images.coins, this.r * this.frameX, (this.r + 70) * this.frameY, this.r, this.r + 70,
-            this.x, this.y, this.r, this.r + 70)
+        drawSprite(images.coins, this.w * this.frameX, this.h * this.frameY, this.w, this.h,
+            this.x, this.y, this.w, this.h)
         console.log('drawing coin')
-        // if (this.frameX < this.frameLimit) {
-        //     this.frameX++
-        // } else {
-        //     this.frameX = this.frameNumber;
-        // }
+        if (this.frameX < this.frameLimit) {
+            this.frameX++
+            if (this.frameX === 3) {
+                this.frameX -= 1.05
+            }
+        } else {
+            this.frameX = this.frameNumber;
+        }
     }
 }
 
