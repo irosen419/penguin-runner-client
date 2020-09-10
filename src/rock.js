@@ -5,6 +5,8 @@ class Rock {
         this.w = w
         this.h = h
         this.c = c
+        this.frameX = 0;
+        this.frameY = 0;
 
         this.dx = -gameSpeed;
     }

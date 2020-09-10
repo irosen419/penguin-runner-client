@@ -7,8 +7,8 @@ class Player {
         this.w = w
         this.h = h
         this.c = c
-        this.frameLimit = 13;
-        this.frameNumber = 0;
+        this.frameLimit = 7;
+        this.frameNumber = 3;
         this.dy = 0;
         this.jumpForce = 15
         this.originalHeight = h
@@ -29,8 +29,13 @@ class Player {
             if (e.key === 'Shift' || e.key === 's') {
                 this.frameX = 0
                 this.frameY = 0
-                this.frameNumber = 0;
-                this.frameLimit = 13
+                this.frameNumber = 3;
+                this.frameLimit = 7
+            } else if (e.code === 'KeyW' || e.code === 'Space') {
+                this.frameX = 0
+                this.frameY = 0
+                this.frameNumber = 3;
+                this.frameLimit = 7
             }
         })
 
@@ -39,11 +44,11 @@ class Player {
             this.frameY = 6;
             this.frameNumber = 6;
             this.frameLimit = 3;
+
             this.h = this.originalHeight / 2;
             this.dy += 1.5
         } else {
             this.h = this.originalHeight
-            // console.log("the else is firing")
         }
 
         this.y += this.dy;
@@ -66,7 +71,17 @@ class Player {
         if (this.grounded && this.jumpTimer == 0) {
             this.jumpTimer = 1;
             this.dy = -this.jumpForce;
+
+            this.frameX = 3
+            this.frameY = 3
+            this.frameNumber = 6;
+            this.frameLimit = 3;
         } else if (this.jumpTimer > 0 && this.jumpTimer < 15) {
+            this.frameX = 3
+            this.frameY = 3
+            this.frameNumber = 6;
+            this.frameLimit = 3;
+
             this.jumpTimer++
             this.dy = -this.jumpForce - (this.jumpTimer / 50)
         }
@@ -77,12 +92,12 @@ class Player {
             this.x, this.y, this.w, this.h)
         if (this.frameX < this.frameLimit) {
             this.frameX++
-            // console.log(this.frameX, this.frameLimit)
         } else {
             this.frameX = this.frameNumber;
         }
 
     }
+
 
     drawHitBox() {
         ctx.beginPath();

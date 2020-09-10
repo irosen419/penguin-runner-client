@@ -16,14 +16,25 @@ let player;
 let gravity;
 let rocks = [];
 let coins = [];
+let coinSprites = [];
 let gameSpeed;
 let KEYS = {};
 let users = [];
 
+//FPS STUFF
+// let fps = 120;
+// let now;
+// let then = Date.now();
+// let interval = 1000 / fps;
+// let delta;
+
 // Sprite Images
 const images = {};
 images.penguin = new Image();
-images.penguin.src = 'styles/images/copy_of_256x256.png';
+images.penguin.src = 'styles/images/penguin_sprites.png';
+
+images.coins = new Image()
+images.coins.src = 'styles/images/smallcoins-removebg-preview.png'
 
 // Music
 let music;
@@ -170,7 +181,7 @@ function spawnRock() {
     let size = RandomIntInRange(20, 70);
     let type = RandomIntInRange(0, 1)
 
-    let rock = new Rock(canvas.width + size, canvas.height - size, size, size, '#2484E4')
+    let rock = new Rock(canvas.width + size, canvas.height - size, size, size, '#0F66E9')
 
     if (type == 1) {
         rock.y -= player.originalHeight - 10
@@ -182,9 +193,10 @@ function spawnCoin() {
     let size = 30
     let randomHeight = RandomIntInRange(1, 10)
 
-    let coin = new Coin(canvas.width + size, canvas.height - (size * randomHeight), 23, 0, 2 * Math.PI, '#FAD25A')
-
+    let coin = new Coin(canvas.width + size, canvas.height - (size * randomHeight), 33, 33, 'rgba(255, 255, 255, 0)')
+    let coinSprite = new Coin(canvas.width + size - 12, canvas.height - (size * randomHeight + 84), 50, 200, 'rgba(255, 255, 255, 0)')
     coins.push(coin)
+    coinSprites.push(coinSprite)
 }
 
 function RandomIntInRange(min, max) {
@@ -291,13 +303,14 @@ let spawnTimer = initialSpawnTimer
 let initialCoinSpawnTimer = -150
 let coinSpawnTimer = initialCoinSpawnTimer
 function update() {
-    const animation = requestAnimationFrame(update);
+
 
     // window.addEventListener('resize', function () {
     //     canvas.height = window.innerHeight;
     //     canvas.width = window.innerWidth;
     // })
 
+    const animation = requestAnimationFrame(update);
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // Coin Spawn Timer
@@ -318,10 +331,12 @@ function update() {
 
     // Spawn Coins
 
-    for (let i = 0; i < coins.length; i++) {
+    for (let i = 0; i < coinSprites.length; i++) {
         let c = coins[i]
+        let cS = coinSprites[i]
 
-        if (player.x < (c.x + c.r + 5) && player.x + player.w > c.x && player.y < (c.y + c.r + 5) && player.y + player.h > c.y) {
+        if (player.x < (c.x + c.w) && player.x + player.w > c.x && player.y < (c.y + c.h) && player.y + player.h > c.y) {
+            coinSprites.splice(i, 1)
             coins.splice(i, 1)
             console.log('hello')
             score += 10;
@@ -330,6 +345,7 @@ function update() {
         }
 
         c.update()
+        cS.updateSprite()
     }
 
     // Rock Spawn Timer
@@ -387,7 +403,9 @@ function update() {
 
     highscoreText.draw()
 
-    gameSpeed += 0.003
+    gameSpeed += 0.0025
+
+
 
 }
 

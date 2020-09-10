@@ -1,10 +1,13 @@
 class Coin {
-    constructor(x, y, r, sA, eA, c) {
+    constructor(x, y, w, h, c) {
         this.x = x
         this.y = y
-        this.r = r
-        this.sA = sA
-        this.eA = eA
+        this.w = w
+        this.h = h
+        this.frameX = 0
+        this.frameY = 0
+        this.frameNumber = 0
+        this.frameLimit = 4
         this.c = c
 
         this.dx = -gameSpeed;
@@ -16,13 +19,35 @@ class Coin {
         this.dx = -gameSpeed
     }
 
+    updateSprite() {
+        this.x += this.dx
+        this.drawCoin()
+        // console.log(this, this.x)
+        this.dx = -gameSpeed
+    }
+
     draw() {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, this.sA, this.eA)
         ctx.fillStyle = this.c;
-        ctx.fill()
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = '#003300';
-        ctx.stroke();
+        ctx.fillRect(this.x, this.y, this.w, this.h)
+        ctx.closePath()
     }
+
+    drawCoin() {
+        drawSprite(images.coins, this.w * this.frameX, this.h * this.frameY, this.w, this.h,
+            this.x, this.y, this.w, this.h)
+        console.log('drawing coin')
+        if (this.frameX < this.frameLimit) {
+            this.frameX++
+            if (this.frameX === 3) {
+                this.frameX -= 1.05
+            }
+        } else {
+            this.frameX = this.frameNumber;
+        }
+    }
+}
+
+function drawSprite(img, sX, sY, sW, sH, dX, dY, dw, dH) {
+    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dw, dH)
 }
