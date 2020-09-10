@@ -4,7 +4,6 @@ let modal = document.getElementById("myModal");
 let btn = document.getElementById("myBtn");
 
 btn.onclick = function () {
-    console.log('open modal')
     modal.style.display = "block";
 }
 
@@ -108,7 +107,6 @@ let span = qs('#mainMenu');
 
 document.addEventListener('click', e => {
     if (e.target.matches('#mainMenu')) {
-        console.log('button')
         modal.style.display = "none";
     }
 })

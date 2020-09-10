@@ -67,7 +67,6 @@ class UserAchievement {
     }
 
     twentyFiveInGame(userId) {
-        console.log(userId)
         let achievement = {
             "user_id": userId,
             "achievement_id": 4
@@ -84,7 +83,6 @@ class UserAchievement {
 
         return fetch(this.achievementUrl, options)
             .then(resp => resp.json())
-            .then(console.log)
     }
     fiddyInGame(userId) {
         let achievement = {

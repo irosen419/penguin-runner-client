@@ -11,7 +11,6 @@ class Sound {
         document.body.appendChild(this.sound);
     }
     playMusic() {
-        console.dir(this)
         this.sound.volume = 0.4
         this.sound.play();
     }
@@ -26,7 +25,6 @@ class Sound {
     lowerVolume() {
         if (this.sound.volume > 0) {
             this.sound.volume -= 0.03
-            console.log(this.sound.volume)
         }
     }
 

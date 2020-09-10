@@ -151,17 +151,13 @@ const grabUsername = (users, username) => {
 
         if (user) {
             userId = user.id
-            console.log(`Your current user is ${user.id}`)
-            console.log("You are signing in")
             findAchievements()
             signIn(userId)
         } else {
-            console.log('You are signing up. Thanks!')
             signUp(username)
         }
 
     } else {
-        console.log("You are creating your very first user")
         signUp(username)
     }
 }
@@ -273,9 +269,7 @@ const giveAchievement = (rockCounter) => {
 
     if (gameRocks >= 25 && !twentyFiveGameRocks) {
         let achievement = new UserAchievement("25 Rocks Dodged in One Game")
-        console.log(userId)
         achievement.twentyFiveInGame(userId).then(obj => {
-            console.log('25 in a game')
             twentyFiveGameRocks = true
             displayAchievement()
         })
@@ -335,9 +329,23 @@ function update() {
         if (player.x < (c.x + c.w) && player.x + player.w > c.x && player.y < (c.y + c.h) && player.y + player.h > c.y) {
             coinSprites.splice(i, 1)
             coins.splice(i, 1)
-            console.log('hello')
-            score += 20;
-            console.log(score)
+            if (score < 1500) {
+                console.log(score)
+                score += 10;
+                console.log(score)
+            } else if (score < 3000) {
+                console.log(score)
+                score += 25
+                console.log(score)
+            } else if (score < 5000) {
+                console.log(score)
+                score += 50
+                console.log(score)
+            } else {
+                console.log(score)
+                score += 100
+                console.log(score)
+            }
             coinSpawnTimer = initialCoinSpawnTimer;
         }
 
@@ -367,7 +375,6 @@ function update() {
             rocks.splice(i, 1)
             rockCounter++
             gameRocks++
-            console.log(gameRocks)
         }
 
         if (player.x < r.x + r.w && player.x + player.w > r.x && player.y < r.y + r.h && player.y + player.h > r.y) {
@@ -375,7 +382,6 @@ function update() {
             spawnTimer = initialSpawnTimer;
             gameSpeed = 3;
             userFetch.patch(highscore, rockCounter, userId)
-            console.log(userId)
 
             giveAchievement(rockCounter, gameRocks)
             gameOver(animation, score)

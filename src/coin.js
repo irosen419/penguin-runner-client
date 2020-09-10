@@ -22,7 +22,6 @@ class Coin {
     updateSprite() {
         this.x += this.dx
         this.drawCoin()
-        // console.log(this, this.x)
         this.dx = -gameSpeed
     }
 
@@ -36,7 +35,6 @@ class Coin {
     drawCoin() {
         drawSprite(images.coins, this.w * this.frameX, this.h * this.frameY, this.w, this.h,
             this.x, this.y, this.w, this.h)
-        console.log('drawing coin')
         if (this.frameX < this.frameLimit) {
             this.frameX++
             if (this.frameX === 3) {
