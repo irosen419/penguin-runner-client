@@ -9,10 +9,10 @@ html, body {
 }
 
 body {
-    display: block;
     background-image: url("https://i.ibb.co/Vx1BWrC/Chilly-Road-Background-V1-1.png");
-    background-repeat: no-repeat;
     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 
     position: relative;
 }

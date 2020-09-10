@@ -4,6 +4,7 @@ let modal = document.getElementById("myModal");
 let btn = document.getElementById("myBtn");
 
 btn.onclick = function () {
+    console.log('open modal')
     modal.style.display = "block";
 }
 
@@ -52,6 +53,7 @@ document.addEventListener('click', e => {
                     if (user1.highscore > user2.highscore) return -1;
                     if (user1.highscore < user2.highscore) return 1;
                 })
+                users = users.splice(0, 10)
                 renderLeaderboard(users);
                 const span = ce('span')
                 span.id = "leaderboardCloseBtn"

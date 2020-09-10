@@ -267,7 +267,7 @@ const giveAchievement = (rockCounter) => {
         })
     }
 
-    if (gameRocks >= 1 && !twentyFiveGameRocks) {
+    if (gameRocks >= 25 && !twentyFiveGameRocks) {
         let achievement = new UserAchievement("25 Rocks Dodged in One Game")
         console.log(userId)
         achievement.twentyFiveInGame(userId).then(obj => {
@@ -276,14 +276,14 @@ const giveAchievement = (rockCounter) => {
             displayAchievement()
         })
     }
-    if (gameRocks >= 5 && !fiddyGameRocks) {
+    if (gameRocks >= 50 && !fiddyGameRocks) {
         let achievement = new UserAchievement("50 Rocks Dodged in One Game")
         achievement.fiddyInGame(userId).then(obj => {
             fiddyGameRocks = true
             displayAchievement()
         })
     }
-    if (gameRocks >= 10 && !hundoGameRocks) {
+    if (gameRocks >= 100 && !hundoGameRocks) {
         let achievement = new UserAchievement("100 Rocks Dodged in One Game")
         achievement.hundoInGame(userId).then(obj => {
             hundoGameRocks = true
@@ -303,12 +303,6 @@ let spawnTimer = initialSpawnTimer
 let initialCoinSpawnTimer = -150
 let coinSpawnTimer = initialCoinSpawnTimer
 function update() {
-
-
-    // window.addEventListener('resize', function () {
-    //     canvas.height = window.innerHeight;
-    //     canvas.width = window.innerWidth;
-    // })
 
     const animation = requestAnimationFrame(update);
     ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -339,7 +333,7 @@ function update() {
             coinSprites.splice(i, 1)
             coins.splice(i, 1)
             console.log('hello')
-            score += 10;
+            score += 20;
             console.log(score)
             coinSpawnTimer = initialCoinSpawnTimer;
         }
@@ -393,7 +387,7 @@ function update() {
 
 
     score++;
-    scoreText.t = "Score:" + score;
+    scoreText.t = "Score: " + score;
     scoreText.draw();
 
     if (score > highscore) {
