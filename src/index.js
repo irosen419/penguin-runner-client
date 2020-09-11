@@ -19,6 +19,7 @@ let gravity;
 let rocks = [];
 let coins = [];
 let coinSprites = [];
+let lasers = [];
 let gameSpeed;
 let KEYS = {};
 let users = [];
@@ -201,6 +202,11 @@ function RandomIntInRange(min, max) {
     return Math.round(Math.random() * (max - min) + min)
 }
 
+function spawnLaser(player) {
+    let laser = new Laser(player.x, player.y - 5, 50, 7, '#FF0000')
+    lasers.push(laser)
+}
+
 function start(highscore) {
     music = new Sound('styles/mp3/Chilly Road by Ryan Flynn .wav')
     music.createAudioTag()
@@ -226,12 +232,15 @@ function start(highscore) {
     window.requestAnimationFrame(update)
 
     document.addEventListener('keydown', e => {
+        console.log(e.key)
         if (e.key === '-') {
             music.lowerVolume()
         } else if (e.key === '=') {
             music.raiseVolume()
         } else if (e.key === 'm') {
             music.muteVolume()
+        } else if (e.key === 'l') {
+            spawnLaser(player)
         }
     })
 
@@ -338,7 +347,6 @@ function update() {
             } else {
                 score += 100
             }
-            //testing
             coinSpawnTimer = initialCoinSpawnTimer;
         }
 
@@ -384,6 +392,33 @@ function update() {
         }
 
         r.update()
+    }
+
+    // Lasers
+
+    if (lasers) {
+        for (let i = 0; i < lasers.length; i++) {
+            let l = lasers[i];
+
+            if (l.x + l.w >= canvas.width) {
+                lasers.splice(i, 1)
+            }
+
+            for (let i = 0; i < rocks.length; i++) {
+                let r = rocks[i]
+
+                if (l.x + l.w >= r.x) {
+                    rocks.splice(i, 1)
+                    lasers.splice(i, 1)
+                    console.log(score)
+                    score += 50
+                    console.log(score)
+                }
+            }
+
+
+            l.update()
+        }
     }
 
     player.animate()
