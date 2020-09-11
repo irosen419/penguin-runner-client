@@ -268,7 +268,7 @@ const giveAchievement = (rockCounter) => {
         })
     }
 
-    if (rockCounter >= 250 && !twofiddyRocks) {
+    if (rockCounter >= 100 && !twofiddyRocks) {
         let achievement = new UserAchievement("250 Lifetime Rocks Dodged")
         achievement.twofiddyBomb(userId).then(obj => {
             twofiddyRocks = true
@@ -276,21 +276,21 @@ const giveAchievement = (rockCounter) => {
         })
     }
 
-    if (gameRocks >= 25 && !twentyFiveGameRocks) {
+    if (gameRocks >= 3 && !twentyFiveGameRocks) {
         let achievement = new UserAchievement("25 Rocks Dodged in One Game")
         achievement.twentyFiveInGame(userId).then(obj => {
             twentyFiveGameRocks = true
             displayAchievement()
         })
     }
-    if (gameRocks >= 50 && !fiddyGameRocks) {
+    if (gameRocks >= 5 && !fiddyGameRocks) {
         let achievement = new UserAchievement("50 Rocks Dodged in One Game")
         achievement.fiddyInGame(userId).then(obj => {
             fiddyGameRocks = true
             displayAchievement()
         })
     }
-    if (gameRocks >= 100 && !hundoGameRocks) {
+    if (gameRocks >= 10 && !hundoGameRocks) {
         let achievement = new UserAchievement("100 Rocks Dodged in One Game")
         achievement.hundoInGame(userId).then(obj => {
             hundoGameRocks = true
@@ -407,7 +407,7 @@ function update() {
             for (let i = 0; i < rocks.length; i++) {
                 let r = rocks[i]
 
-                if (l.x + l.w >= r.x) {
+                if (l.x + l.w >= r.x && l.y >= r.y && l.y + l.h <= r.y + r.h) {
                     rocks.splice(i, 1)
                     lasers.splice(i, 1)
                     console.log(score)
@@ -415,7 +415,6 @@ function update() {
                     console.log(score)
                 }
             }
-
 
             l.update()
         }
