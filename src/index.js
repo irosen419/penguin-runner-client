@@ -330,21 +330,13 @@ function update() {
             coinSprites.splice(i, 1)
             coins.splice(i, 1)
             if (score < 1500) {
-                console.log(score)
                 score += 10;
-                console.log(score)
             } else if (score < 3000) {
-                console.log(score)
                 score += 25
-                console.log(score)
             } else if (score < 5000) {
-                console.log(score)
                 score += 50
-                console.log(score)
             } else {
-                console.log(score)
                 score += 100
-                console.log(score)
             }
             coinSpawnTimer = initialCoinSpawnTimer;
         }
@@ -379,6 +371,8 @@ function update() {
 
         if (player.x < r.x + r.w && player.x + player.w > r.x && player.y < r.y + r.h && player.y + player.h > r.y) {
             rocks = [];
+            coins = [];
+            coinSprites = [];
             spawnTimer = initialSpawnTimer;
             gameSpeed = 3;
             userFetch.patch(highscore, rockCounter, userId)

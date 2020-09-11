@@ -39,6 +39,8 @@ form {
     margin: auto;
 
     font-size: 26px;
+
+    z-index: 2;
 }
 
 form #submitBtn {
