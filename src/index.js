@@ -232,7 +232,6 @@ function start(highscore) {
     window.requestAnimationFrame(update)
 
     document.addEventListener('keydown', e => {
-        console.log(e.key)
         if (e.key === '-') {
             music.lowerVolume()
         } else if (e.key === '=') {
@@ -401,18 +400,16 @@ function update() {
             let l = lasers[i];
 
             if (l.x + l.w >= canvas.width) {
-                lasers.splice(i, 1)
+                lasers.splice(0, 1)
             }
 
             for (let i = 0; i < rocks.length; i++) {
                 let r = rocks[i]
 
-                if (l.x + l.w >= r.x && l.y >= r.y && l.y + l.h <= r.y + r.h) {
+                if (l.x + l.w >= r.x && l.x < r.x + r.w && l.y >= r.y && l.y + l.h <= r.y + r.h) {
                     rocks.splice(i, 1)
                     lasers.splice(i, 1)
-                    console.log(score)
                     score += 50
-                    console.log(score)
                 }
             }
 

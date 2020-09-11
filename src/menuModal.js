@@ -51,6 +51,7 @@ document.addEventListener('click', e => {
                 })
                 users = users.splice(0, 10)
                 renderLeaderboard(users);
+                users = [];
                 const span = ce('span')
                 span.id = "leaderboardCloseBtn"
                 span.className = "close hover"
