@@ -338,6 +338,7 @@ function update() {
             } else {
                 score += 100
             }
+            //testing
             coinSpawnTimer = initialCoinSpawnTimer;
         }
 
