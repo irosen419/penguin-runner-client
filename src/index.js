@@ -238,7 +238,7 @@ function start(highscore) {
             music.raiseVolume()
         } else if (e.key === 'm') {
             music.muteVolume()
-        } else if (e.key === 'l' || (e.location === 2 && e.key === 'Shift')) {
+        } else if (e.key === 'l') {
             spawnLaser(player)
         }
     })
