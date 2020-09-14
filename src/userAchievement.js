@@ -2,7 +2,7 @@ class UserAchievement {
     constructor(name) {
         this.name = name
 
-        this.achievementUrl = 'http://localhost:3000/user_achievements/'
+        this.achievementUrl = 'https://murmuring-sands-05827.herokuapp.com/user_achievements/'
 
     }
 
