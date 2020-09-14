@@ -39,7 +39,7 @@ document.addEventListener('click', e => {
     } else if (e.target.matches('#leaderboard')) {
         innerModal.innerHTML = ""
         innerModal.innerHTML = `<h3>LEADERBOARD</h3></br>`
-        usersFetch = new FetchAdapter('http://localhost:3000/users/')
+        usersFetch = new FetchAdapter('https://murmuring-sands-05827.herokuapp.com/users/')
         usersFetch.get()
             .then(theUsers => {
                 for (const user of theUsers) {
@@ -66,6 +66,7 @@ document.addEventListener('click', e => {
         <h3>Movement: </h3>
         <p>Jump: Tap or hold 'w' / 'Space'</p>
         <p>Crouch: Hold 's' / 'Shift'</p>
+        <p>Laser: Tap 'l'</p>
         <p><strong>- - - - -</strong></p>
         <h3>Audio: </h3>
         <p>Volume down: - </p>
