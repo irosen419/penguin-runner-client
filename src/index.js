@@ -71,7 +71,7 @@ document.addEventListener('submit', e => {
     }
 })
 
-let userFetch = new FetchAdapter('http://localhost:3000/users/')
+let userFetch = new FetchAdapter('https://murmuring-sands-05827.herokuapp.com/users/')
 
 const fetchFormInfo = (form) => {
     const username = form.username.value

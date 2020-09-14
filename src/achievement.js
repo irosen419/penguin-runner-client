@@ -1,6 +1,6 @@
 class Achievement {
     constructor() {
-        this.url = 'http://localhost:3000/achievements/'
+        this.url = 'https://murmuring-sands-05827.herokuapp.com/achievements/'
     }
 
     fetchAchievements() {
