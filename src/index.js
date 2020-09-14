@@ -19,6 +19,7 @@ let gravity;
 let rocks = [];
 let coins = [];
 let coinSprites = [];
+let lasers = [];
 let gameSpeed;
 let KEYS = {};
 let users = [];
@@ -201,6 +202,11 @@ function RandomIntInRange(min, max) {
     return Math.round(Math.random() * (max - min) + min)
 }
 
+function spawnLaser(player) {
+    let laser = new Laser(player.x, player.y - 5, 50, 7, '#FF0000')
+    lasers.push(laser)
+}
+
 function start(highscore) {
     music = new Sound('styles/mp3/Chilly Road by Ryan Flynn .wav')
     music.createAudioTag()
@@ -232,6 +238,8 @@ function start(highscore) {
             music.raiseVolume()
         } else if (e.key === 'm') {
             music.muteVolume()
+        } else if (e.key === 'l') {
+            spawnLaser(player)
         }
     })
 
@@ -259,7 +267,7 @@ const giveAchievement = (rockCounter) => {
         })
     }
 
-    if (rockCounter >= 250 && !twofiddyRocks) {
+    if (rockCounter >= 100 && !twofiddyRocks) {
         let achievement = new UserAchievement("250 Lifetime Rocks Dodged")
         achievement.twofiddyBomb(userId).then(obj => {
             twofiddyRocks = true
@@ -267,21 +275,21 @@ const giveAchievement = (rockCounter) => {
         })
     }
 
-    if (gameRocks >= 25 && !twentyFiveGameRocks) {
+    if (gameRocks >= 3 && !twentyFiveGameRocks) {
         let achievement = new UserAchievement("25 Rocks Dodged in One Game")
         achievement.twentyFiveInGame(userId).then(obj => {
             twentyFiveGameRocks = true
             displayAchievement()
         })
     }
-    if (gameRocks >= 50 && !fiddyGameRocks) {
+    if (gameRocks >= 5 && !fiddyGameRocks) {
         let achievement = new UserAchievement("50 Rocks Dodged in One Game")
         achievement.fiddyInGame(userId).then(obj => {
             fiddyGameRocks = true
             displayAchievement()
         })
     }
-    if (gameRocks >= 100 && !hundoGameRocks) {
+    if (gameRocks >= 10 && !hundoGameRocks) {
         let achievement = new UserAchievement("100 Rocks Dodged in One Game")
         achievement.hundoInGame(userId).then(obj => {
             hundoGameRocks = true
@@ -383,6 +391,30 @@ function update() {
         }
 
         r.update()
+    }
+
+    // Lasers
+
+    if (lasers) {
+        for (let i = 0; i < lasers.length; i++) {
+            let l = lasers[i];
+
+            if (l.x + l.w >= canvas.width) {
+                lasers.splice(0, 1)
+            }
+
+            for (let i = 0; i < rocks.length; i++) {
+                let r = rocks[i]
+
+                if (l.x + l.w >= r.x && l.x < r.x + r.w && l.y >= r.y && l.y + l.h <= r.y + r.h) {
+                    rocks.splice(i, 1)
+                    lasers.splice(i, 1)
+                    score += 50
+                }
+            }
+
+            l.update()
+        }
     }
 
     player.animate()
