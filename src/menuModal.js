@@ -65,8 +65,8 @@ document.addEventListener('click', e => {
         innerModal.innerHTML = `
         <h3>Movement: </h3>
         <p>Jump: Tap or hold 'w' / 'Space'</p>
-        <p>Crouch: Hold 's' / 'Shift'</p>
-        <p>Laser: Tap 'l'</p>
+        <p>Crouch: Hold 's' / 'LeftShift'</p>
+        <p>Laser: Tap 'l' / 'RightShift</p>
         <p><strong>- - - - -</strong></p>
         <h3>Audio: </h3>
         <p>Volume down: - </p>
