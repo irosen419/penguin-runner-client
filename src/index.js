@@ -4,6 +4,7 @@ const ce = (element) => document.createElement(element)
 const canvas = qs("#game")
 const ctx = canvas.getContext("2d")
 let achievementDiv = qs('#achievement')
+let controlsDiv = qs('#controls')
 let centerDiv = qs('#center')
 let form = qs('form')
 let gameOverDiv = qs('#game-over')
@@ -214,6 +215,7 @@ function start(highscore) {
     music.playMusic()
 
     centerDiv.remove()
+    controlsDiv.remove()
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
@@ -238,7 +240,7 @@ function start(highscore) {
             music.raiseVolume()
         } else if (e.key === 'm') {
             music.muteVolume()
-        } else if (e.key === 'l') {
+        } else if (e.key === 'l' || (e.location === 2 && e.key === 'Shift')) {
             spawnLaser(player)
         }
     })
@@ -275,21 +277,21 @@ const giveAchievement = (rockCounter) => {
         })
     }
 
-    if (gameRocks >= 3 && !twentyFiveGameRocks) {
+    if (gameRocks >= 25 && !twentyFiveGameRocks) {
         let achievement = new UserAchievement("25 Rocks Dodged in One Game")
         achievement.twentyFiveInGame(userId).then(obj => {
             twentyFiveGameRocks = true
             displayAchievement()
         })
     }
-    if (gameRocks >= 5 && !fiddyGameRocks) {
+    if (gameRocks >= 50 && !fiddyGameRocks) {
         let achievement = new UserAchievement("50 Rocks Dodged in One Game")
         achievement.fiddyInGame(userId).then(obj => {
             fiddyGameRocks = true
             displayAchievement()
         })
     }
-    if (gameRocks >= 10 && !hundoGameRocks) {
+    if (gameRocks >= 100 && !hundoGameRocks) {
         let achievement = new UserAchievement("100 Rocks Dodged in One Game")
         achievement.hundoInGame(userId).then(obj => {
             hundoGameRocks = true

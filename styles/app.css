@@ -16,6 +16,14 @@ body {
     position: relative;
 }
 
+div#controls {
+    position: absolute;
+    top: 15%;
+    right: 10%;
+
+    display: block;
+}
+
 div#center {
     margin: auto;
     max-height: 50vh;
